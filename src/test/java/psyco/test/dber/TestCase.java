@@ -28,6 +28,8 @@ public class TestCase {
     @Resource
     private JdbcTemplate jdbcTemplate;
 
+    @Resource
+    private Dber dber;
 //    @Resource
 //    DaoLayer daoLayer;
 
@@ -39,5 +41,6 @@ public class TestCase {
         }
 
         System.out.println(a);
+        System.out.println(dber.getDaoPackageToScan());
     }
 }

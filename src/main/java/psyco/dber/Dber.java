@@ -11,6 +11,7 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
+import psyco.dber.anno.Dao;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -21,11 +22,18 @@ import java.util.TreeSet;
 /**
  * Created by peng on 15/12/23.
  */
-public class Dber implements ApplicationContextAware, InitializingBean {
+public class Dber implements ApplicationContextAware ,InitializingBean {
 
 
     private List<String> daoPackageToScan;
     private ApplicationContext applicationContext;
+
+    public Dber() {
+    }
+
+    public void init() {
+        System.out.println(getClassSet(Dao.class));
+    }
 
     private Set<Class<?>> getClassSet(Class<? extends Annotation> annotation) {
         final String RESOURCE_PATTERN = "/**/*.class";
@@ -79,6 +87,6 @@ public class Dber implements ApplicationContextAware, InitializingBean {
     }
 
     public void afterPropertiesSet() throws Exception {
-//        System.out.println(getClassSet(Dao.class));
+        System.out.println("fuck");
     }
 }

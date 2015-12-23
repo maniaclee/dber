@@ -1,7 +1,3 @@
-/**
- * pajk.com Inc.
- * Copyright (c) 2014-2015 All Rights Reserved.
- */
 package psyco.test;
 
 import org.springframework.context.annotation.Bean;
