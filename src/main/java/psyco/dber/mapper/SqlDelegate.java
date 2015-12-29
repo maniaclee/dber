@@ -7,7 +7,12 @@ import java.util.List;
  */
 public interface SqlDelegate {
 
-    List select();
-    int update();
+    List select(Sentence sentence, Object[] parameters);
+
+    int update(Sentence sentence, Object[] parameters);
+
+    int delete(Sentence sentence, Object[] parameters);
+
+    Object insert(Sentence sentence, Object[] parameters);
 
 }

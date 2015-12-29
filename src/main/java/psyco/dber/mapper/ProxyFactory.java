@@ -5,5 +5,5 @@ package psyco.dber.mapper;
  */
 public interface ProxyFactory {
 
-    <T> T proxy(Class<T> clz);
+    <T> T proxy(Class<T> clz) throws Exception;
 }

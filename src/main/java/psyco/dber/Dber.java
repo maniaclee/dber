@@ -10,6 +10,7 @@ import org.springframework.util.ClassUtils;
 import psyco.dber.anno.Dao;
 import psyco.dber.mapper.MapperHolder;
 import psyco.dber.mapper.ProxyFactory;
+import psyco.dber.mapper.SpringProxyFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -28,7 +29,7 @@ public class Dber {
     private List<String> daoPackageToScan;
 
     private Map<Class<?>, Object> delegates = new ConcurrentHashMap<Class<?>, Object>();
-    private ProxyFactory proxyFactory;
+    private ProxyFactory proxyFactory = new SpringProxyFactory();
 
     public Dber() {
     }
@@ -37,7 +38,7 @@ public class Dber {
         return (T) delegates.get(clz);
     }
 
-    public void init() {
+    public void init() throws Exception {
         Set<Class<?>> clz = getClassSet(Dao.class);
         MapperHolder.parse(clz);
         for (Class<?> c : clz) {
