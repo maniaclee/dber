@@ -1,9 +1,5 @@
 package psyco.dber;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -12,28 +8,43 @@ import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.util.ClassUtils;
 import psyco.dber.anno.Dao;
+import psyco.dber.mapper.MapperHolder;
+import psyco.dber.mapper.ProxyFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by peng on 15/12/23.
  */
-public class Dber implements ApplicationContextAware ,InitializingBean {
+public class Dber {
 
 
     private List<String> daoPackageToScan;
-    private ApplicationContext applicationContext;
+
+    private Map<Class<?>, Object> delegates = new ConcurrentHashMap<Class<?>, Object>();
+    private ProxyFactory proxyFactory;
 
     public Dber() {
     }
 
-    public void init() {
-        System.out.println(getClassSet(Dao.class));
+    public <T> T getProxy(Class<T> clz) {
+        return (T) delegates.get(clz);
     }
+
+    public void init() {
+        Set<Class<?>> clz = getClassSet(Dao.class);
+        MapperHolder.parse(clz);
+        for (Class<?> c : clz) {
+            delegates.put(c, proxyFactory.proxy(c));
+        }
+    }
+
 
     private Set<Class<?>> getClassSet(Class<? extends Annotation> annotation) {
         final String RESOURCE_PATTERN = "/**/*.class";
@@ -80,13 +91,5 @@ public class Dber implements ApplicationContextAware ,InitializingBean {
 
     public void setDaoPackageToScan(List<String> daoPackageToScan) {
         this.daoPackageToScan = daoPackageToScan;
-    }
-
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("fuck");
     }
 }

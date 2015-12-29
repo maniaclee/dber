@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import psyco.dber.Dber;
+import psyco.dber.DberFactoryBean;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -33,9 +33,9 @@ public class DalConfig {
     }
 
     @Bean
-    public Dber dber() {
-        Dber dber = new Dber();
-        dber.setDaoPackageToScan(Collections.singletonList("psyco"));
+    public DberFactoryBean dber() {
+        DberFactoryBean dber = new DberFactoryBean();
+        dber.setPackageToScan(Collections.singletonList("psyco"));
         return dber;
     }
 

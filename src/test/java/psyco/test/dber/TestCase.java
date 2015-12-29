@@ -39,7 +39,6 @@ public class TestCase {
         for (Object m : a) {
             System.out.println(m);
         }
-
         System.out.println(a);
         System.out.println(dber.getDaoPackageToScan());
     }
