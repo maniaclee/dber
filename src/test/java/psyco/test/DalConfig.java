@@ -25,7 +25,7 @@ public class DalConfig {
         return driverManagerDataSource;
     }
 
-    @Bean(initMethod = "init")
+    @Bean(initMethod = "initByPackageScan")
     public Dber dber(){
         Dber dber = new Dber();
         dber.setDaoPackageToScan(Collections.singletonList("psyco"));

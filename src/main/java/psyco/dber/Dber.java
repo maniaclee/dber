@@ -26,6 +26,8 @@ public class Dber {
 
     private Map<Class<?>, Object> delegates = new ConcurrentHashMap<Class<?>, Object>();
     private ProxyFactory proxyFactory = new SpringProxyFactory();
+    private Set<Class<?>> clz;
+    private boolean inited = false;
 
     public Dber() {
     }
@@ -34,12 +36,17 @@ public class Dber {
         return (T) delegates.get(clz);
     }
 
+    public void initByPackageScan() throws Exception {
+        clz = getClassSet(Dao.class);
+        init();
+    }
+
     public void init() throws Exception {
-        Set<Class<?>> clz = getClassSet(Dao.class);
         MapperHolder.parse(clz);
         for (Class<?> c : clz) {
             delegates.put(c, proxyFactory.proxy(c));
         }
+        this.inited = true;
     }
 
 
@@ -98,5 +105,9 @@ public class Dber {
 
     public void setDelegates(Map<Class<?>, Object> delegates) {
         this.delegates = delegates;
+    }
+
+    public boolean isInited() {
+        return inited;
     }
 }
