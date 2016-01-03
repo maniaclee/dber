@@ -17,8 +17,9 @@ public class MapperHolder {
     public static void parse(Set<Class<?>> clz) throws MappingException {
         for (Class<?> c : clz) {
             for (Method m : c.getDeclaredMethods()) {
-
-                addMapping(SqlDefinition.parse(m));
+                SqlDefinition sqlDefinition = SqlDefinition.parse(m);
+                if (sqlDefinition != null)
+                    addMapping(sqlDefinition);
 
             }
         }

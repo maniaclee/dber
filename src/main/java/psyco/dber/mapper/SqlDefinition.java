@@ -33,7 +33,8 @@ public class SqlDefinition {
             type = SqlType.Delete;
         }
         if (sql == null)
-            throw new MappingException(String.format("method %s must annotated with Insert/Update/Select/Delete", m.getName()));
+            return null;
+//            throw new MappingException(String.format("method %s must annotated with Insert/Update/Select/Delete", m.getName()));
         SqlDefinition sqlDefinition = new SqlDefinition();
         sqlDefinition.setSql(sql);
         sqlDefinition.setSqlId(generateId(m));

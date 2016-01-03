@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import psyco.dber.Dber;
 import psyco.test.DalConfig;
+import psyco.test.dber.entity.User;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.Map;
 @ComponentScan(basePackages = "psyco")
 @Configuration
 @EnableTransactionManagement
-@ContextConfiguration(classes = {Dber.class, DalConfig.class})
+@ContextConfiguration(classes = {DalConfig.class})
 public class TestCase {
 
     @Resource
@@ -30,8 +31,9 @@ public class TestCase {
 
     @Resource
     private Dber dber;
-//    @Resource
-//    DaoLayer daoLayer;
+    @Resource
+    DaoLayer daoLayer;
+
 
     @Test
     public void sdfs() {
@@ -41,5 +43,6 @@ public class TestCase {
         }
         System.out.println(a);
         System.out.println(dber.getDaoPackageToScan());
+        List<User> re = daoLayer.find();
     }
 }

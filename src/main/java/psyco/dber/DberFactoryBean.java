@@ -2,14 +2,16 @@ package psyco.dber;
 
 import org.springframework.beans.factory.FactoryBean;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by peng on 15/12/29.
  */
+@Deprecated
 public class DberFactoryBean implements FactoryBean<Dber> {
     Dber dber = new Dber();
-    List<String> packageToScan;
+    List<String> packageToScan = Collections.singletonList("psyco");
 
     public Dber getObject() throws Exception {
         dber.setDaoPackageToScan(packageToScan);

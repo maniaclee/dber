@@ -14,17 +14,13 @@ import psyco.dber.mapper.SpringProxyFactory;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by peng on 15/12/23.
  */
 public class Dber {
-
 
     private List<String> daoPackageToScan;
 
@@ -50,7 +46,7 @@ public class Dber {
     private Set<Class<?>> getClassSet(Class<? extends Annotation> annotation) {
         final String RESOURCE_PATTERN = "/**/*.class";
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
-        Set<Class<?>> set = new TreeSet<Class<?>>();
+        Set<Class<?>> set = new HashSet<Class<?>>();
         if (daoPackageToScan == null || this.daoPackageToScan.isEmpty()) {
             throw new RuntimeException("no package found");
         }
@@ -72,12 +68,14 @@ public class Dber {
                         continue;
                     }
                     String className = reader.getClassMetadata().getClassName();
+                    System.out.println(className);
                     try {
                         Class<?> clz = Class.forName(className);
                         if (clz.getAnnotation(annotation) != null) {
                             set.add(clz);
                         }
                     } catch (Exception e) {
+                        e.printStackTrace();
                         continue;
                     }
                 }
@@ -92,5 +90,13 @@ public class Dber {
 
     public void setDaoPackageToScan(List<String> daoPackageToScan) {
         this.daoPackageToScan = daoPackageToScan;
+    }
+
+    public Map<Class<?>, Object> getDelegates() {
+        return delegates;
+    }
+
+    public void setDelegates(Map<Class<?>, Object> delegates) {
+        this.delegates = delegates;
     }
 }
