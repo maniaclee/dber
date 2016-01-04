@@ -34,6 +34,7 @@ public class SpringProxyFactory implements ProxyFactory {
                 case Delete:
                     return sqlDelegate.delete(sentence, args);
             }
+            System.out.println("shit fuck");
             return null;
         }
     }

@@ -42,7 +42,6 @@ public class TestCase {
             System.out.println(m);
         }
         System.out.println(a);
-        System.out.println(dber.getDaoPackageToScan());
-        List<User> re = daoLayer.find();
+        //        System.out.println(daoLayer.find());
     }
 }

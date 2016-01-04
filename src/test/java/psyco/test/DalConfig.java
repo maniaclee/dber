@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import psyco.dber.Dber;
+import psyco.dber.spring.DberClient;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -42,6 +43,12 @@ public class DalConfig {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(driverManagerDataSource);
         return jdbcTemplate;
+    }
+
+    @Bean
+    public DberClient  dberClient(){
+        DberClient client = new DberClient();
+        return client;
     }
 
 
