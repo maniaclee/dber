@@ -4,9 +4,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.mapper.SqlDelegate;
+import psyco.dber.parser.EntityConvertor;
 import psyco.dber.utils.ReflectionUtils;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,22 +17,45 @@ import java.util.List;
  */
 public class SqlDelegaetImpl implements SqlDelegate {
     JdbcTemplate template;
+    EntityConvertor entityConvertor;
+    private volatile boolean inited = false;
 
     public SqlDelegaetImpl(JdbcTemplate template) {
         this.template = template;
     }
 
     public List select(Sentence sentence, Object[] parameters) {
-        Class clz = ReflectionUtils.getGenericType(sentence.getSqlDefinition().getReturnType(), 0);
-        System.out.println("select what the fuck");
-        template.query(sentence.getSqlDefinition().getSql(), parameters, new RowMapper<Object>() {
-            public Object mapRow(ResultSet resultSet, int i) throws SQLException {
-                //TODO
-                return null;
+        if (!inited) {
+            synchronized (this) {
+                if (!inited) {
+                    entityConvertor = new EntityConvertor(ReflectionUtils.getGenericType(sentence.getSqlDefinition().getReturnType(), 0));
+                    inited = true;
+                }
             }
-        });
-        return template.queryForList(sentence.getSqlDefinition().getSql(),clz,parameters);
+        }
+        return template.query(sentence.getSqlDefinition().getSql(), parameters, new EntityMapper<Object>());
     }
+
+    private class EntityMapper<T> implements RowMapper<T> {
+
+        public T mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ResultSetMetaData meta = rs.getMetaData();
+            int count = meta.getColumnCount();
+            try {
+                Object re = entityConvertor.newInstance();
+                for (int i = 1; i <= count; i++) {
+                    Object col = rs.getObject(i);
+                    if (col != null)
+                        entityConvertor.setValue(meta.getColumnName(i),col, re);
+                }
+                return (T) re;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
 
     public int update(Sentence sentence, Object[] parameters) {
         return 0;

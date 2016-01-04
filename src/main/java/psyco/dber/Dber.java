@@ -81,7 +81,6 @@ public class Dber {
                         continue;
                     }
                     String className = reader.getClassMetadata().getClassName();
-                    System.out.println(className);
                     try {
                         Class<?> clz = Class.forName(className);
                         if (clz.getAnnotation(annotation) != null) {

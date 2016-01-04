@@ -1,5 +1,6 @@
 package psyco.test.dber;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.context.annotation.ComponentScan;
@@ -34,12 +35,14 @@ public class TestCase {
 
     @Test
     public void sdfs() {
-        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
-//        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
-        for (Object m : a) {
-            System.out.println(m);
+//        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
+////        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
+//        for (Object m : a) {
+//            System.out.println(m);
+//        }
+//        System.out.println(a);
+        for(User u : daoLayer.find()){
+            System.out.println(ToStringBuilder.reflectionToString(u));
         }
-        System.out.println(a);
-        System.out.println(daoLayer.find());
     }
 }
