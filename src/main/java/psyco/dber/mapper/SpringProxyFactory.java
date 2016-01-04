@@ -11,6 +11,18 @@ import psyco.dber.exception.DberException;
 public class SpringProxyFactory implements ProxyFactory {
 
 
+    private final SqlDelegate sqlDelegate;
+
+    public SpringProxyFactory() throws Exception {
+        this(null);
+    }
+
+    public SpringProxyFactory(SqlDelegate sqlDelegate) throws Exception {
+        if (sqlDelegate == null)
+            throw new DberException("no SqlDelegate are found.");
+        this.sqlDelegate = sqlDelegate;
+    }
+
     public <T> T proxy(Class<T> clz) throws Exception {
         ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
         proxyFactoryBean.setProxyInterfaces(new Class[]{clz});
@@ -18,8 +30,7 @@ public class SpringProxyFactory implements ProxyFactory {
         return (T) proxyFactoryBean.getObject();
     }
 
-    private static class DaoMethodInterceptor implements MethodInterceptor {
-        private final SqlDelegate sqlDelegate = new SqlDelegaetImpl();
+    private class DaoMethodInterceptor implements MethodInterceptor {
 
         public Object invoke(MethodInvocation methodInvocation) throws Throwable {
             SqlDefinition sql = SqlDefinition.parse(methodInvocation.getMethod());

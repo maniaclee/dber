@@ -11,10 +11,14 @@ import psyco.dber.anno.Dao;
 import psyco.dber.mapper.MapperHolder;
 import psyco.dber.mapper.ProxyFactory;
 import psyco.dber.mapper.SpringProxyFactory;
+import psyco.dber.mapper.SqlDelegate;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -25,9 +29,10 @@ public class Dber {
     private List<String> daoPackageToScan;
 
     private Map<Class<?>, Object> delegates = new ConcurrentHashMap<Class<?>, Object>();
-    private ProxyFactory proxyFactory = new SpringProxyFactory();
+    private ProxyFactory proxyFactory;
     private Set<Class<?>> clz;
     private boolean inited = false;
+    private SqlDelegate sqlDelegate;
 
     public Dber() {
     }
@@ -42,6 +47,7 @@ public class Dber {
     }
 
     public void init() throws Exception {
+        proxyFactory = new SpringProxyFactory(sqlDelegate);
         MapperHolder.parse(clz);
         for (Class<?> c : clz) {
             delegates.put(c, proxyFactory.proxy(c));
@@ -110,4 +116,13 @@ public class Dber {
     public boolean isInited() {
         return inited;
     }
+
+    public SqlDelegate getSqlDelegate() {
+        return sqlDelegate;
+    }
+
+    public void setSqlDelegate(SqlDelegate sqlDelegate) {
+        this.sqlDelegate = sqlDelegate;
+    }
 }
+

@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import psyco.dber.Dber;
 import psyco.test.DalConfig;
 import psyco.test.dber.entity.User;
 
@@ -30,14 +29,13 @@ public class TestCase {
     private JdbcTemplate jdbcTemplate;
 
     @Resource
-    private Dber dber;
-    @Resource
     DaoLayer daoLayer;
 
 
     @Test
     public void sdfs() {
         List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
+//        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
         for (Object m : a) {
             System.out.println(m);
         }

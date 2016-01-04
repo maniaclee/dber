@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import psyco.dber.Dber;
 import psyco.dber.spring.DberClient;
+import psyco.dber.spring.SqlDelegaetImpl;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -26,10 +27,17 @@ public class DalConfig {
         return driverManagerDataSource;
     }
 
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource driverManagerDataSource) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(driverManagerDataSource);
+        return jdbcTemplate;
+    }
     @Bean(initMethod = "initByPackageScan")
-    public Dber dber(){
+    public Dber dber(JdbcTemplate jdbcTemplate){
         Dber dber = new Dber();
         dber.setDaoPackageToScan(Collections.singletonList("psyco"));
+        dber.setSqlDelegate(new SqlDelegaetImpl(jdbcTemplate));
         return dber;
     }
 //    @Bean
@@ -38,12 +46,6 @@ public class DalConfig {
 //        dber.setPackageToScan(Collections.singletonList("psyco"));
 //        return dber;
 //    }
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource driverManagerDataSource) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(driverManagerDataSource);
-        return jdbcTemplate;
-    }
 
     @Bean
     public DberClient  dberClient(){

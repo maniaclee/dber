@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.jdbc.core.JdbcTemplate;
 import psyco.dber.Dber;
 import psyco.dber.exception.DberException;
 import psyco.dber.utils.DberUtils;
@@ -31,6 +32,12 @@ public class DberClient implements InitializingBean, ApplicationListener<Context
         }
         if (!dber.isInited()) {
 
+        }
+        if (dber.getSqlDelegate() == null) {
+            JdbcTemplate jdbcTemplate = applicationContext.getBean(JdbcTemplate.class);
+            if (jdbcTemplate == null)
+                throw new DberException("no SqlDelegate is found.");
+            dber.setSqlDelegate(new SqlDelegaetImpl(jdbcTemplate));
         }
 
 
