@@ -24,7 +24,8 @@ public class DberClient implements InitializingBean, ApplicationListener<Context
 
     public void registBean() throws DberException {
         /** create Dber if necessary */
-        if (dber == null || applicationContext.getBean(Dber.class) == null) {
+        this.dber = applicationContext.getBean(Dber.class);
+        if (dber == null) {
             this.dber = createDber();
             DberUtils.registSingleton(DberUtils.getDefaultListableBeanFactoryFromApplicationContext(applicationContext), "dber", dber);
         }
@@ -38,7 +39,7 @@ public class DberClient implements InitializingBean, ApplicationListener<Context
             throw new DberException("no delegates are found.");
         }
         for (Class<?> clz : delegates.keySet()) {
-            DberUtils.registSingleton(DberUtils.getDefaultListableBeanFactoryFromApplicationContext(applicationContext), null, delegates.get(clz));
+            DberUtils.registSingleton(DberUtils.getDefaultListableBeanFactoryFromApplicationContext(applicationContext), DberUtils.generateBeanId(clz), delegates.get(clz));
         }
 
     }
@@ -49,10 +50,14 @@ public class DberClient implements InitializingBean, ApplicationListener<Context
     }
 
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        try {
+            registBean();
+        } catch (DberException e) {
+            e.printStackTrace();
+        }
     }
 
     public void afterPropertiesSet() throws Exception {
-        registBean();
     }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

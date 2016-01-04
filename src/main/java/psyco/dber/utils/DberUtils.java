@@ -1,5 +1,6 @@
 package psyco.dber.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -28,5 +29,9 @@ public class DberUtils {
 
     public static void registSingleton(ConfigurableListableBeanFactory beanFactory, String id, Object bean) {
         beanFactory.registerSingleton(id, bean);
+    }
+
+    public static String generateBeanId(Class<?> clz ){
+        return StringUtils.uncapitalize(clz.getSimpleName());
     }
 }
