@@ -1,5 +1,6 @@
 package psyco.dber.mapper;
 
+import com.google.common.collect.Lists;
 import psyco.dber.exception.MappingException;
 import psyco.dber.utils.ReflectionUtils;
 
@@ -27,6 +28,8 @@ public class MapperHolder {
                     Parameter[] params = m.getParameters();
                     if (params == null || params.length == 0)
                         continue;
+
+                    List<ParameterMapper>  pms = Lists.newLinkedList();
 
 //                    List<ParameterMapper> ms = createParameters(m);
 //                    sentence.setParameterMappers(ms);

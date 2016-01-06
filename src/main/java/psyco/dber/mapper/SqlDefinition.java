@@ -1,5 +1,6 @@
 package psyco.dber.mapper;
 
+import com.google.common.base.Joiner;
 import psyco.dber.anno.Delete;
 import psyco.dber.anno.Insert;
 import psyco.dber.anno.Select;
@@ -25,7 +26,7 @@ public class SqlDefinition {
             sql = m.getAnnotation(Insert.class).value();
             type = SqlType.Insert;
         } else if (m.getAnnotation(Select.class) != null) {
-            sql = m.getAnnotation(Select.class).value();
+            sql = Joiner.on(' ').join(m.getAnnotation(Select.class).value());
             type = SqlType.Select;
         } else if (m.getAnnotation(Update.class) != null) {
             sql = m.getAnnotation(Update.class).value();
@@ -36,7 +37,7 @@ public class SqlDefinition {
         }
         if (sql == null)
             return null;
-//            throw new MappingException(String.format("method %s must annotated with Insert/Update/Select/Delete", m.getName()));
+        //            throw new MappingException(String.format("method %s must annotated with Insert/Update/Select/Delete", m.getName()));
         SqlDefinition sqlDefinition = new SqlDefinition();
         sqlDefinition.setSql(sql);
         sqlDefinition.setSqlId(generateId(m));
