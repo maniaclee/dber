@@ -35,13 +35,14 @@ public class TestCase {
 
     @Test
     public void sdfs() {
-//        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
-////        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
-//        for (Object m : a) {
-//            System.out.println(m);
-//        }
-//        System.out.println(a);
-        for(User u : daoLayer.find()){
+        //        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
+        ////        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
+        //        for (Object m : a) {
+        //            System.out.println(m);
+        //        }
+        //        System.out.println(a);
+        for (User u : daoLayer.find(41)) {
+            //        for(User u : daoLayer.findByName("root")){
             System.out.println(ToStringBuilder.reflectionToString(u));
         }
     }

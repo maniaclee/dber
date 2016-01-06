@@ -58,14 +58,16 @@ public class SqlDelegaetImpl implements SqlDelegate {
 
 
     public int update(Sentence sentence, Object[] parameters) {
-        return 0;
+        return template.update(sentence.getSqlDefinition().getSql(),parameters);
     }
 
     public int delete(Sentence sentence, Object[] parameters) {
-        return 0;
+        return delete(sentence,parameters);
     }
 
     public Object insert(Sentence sentence, Object[] parameters) {
+        int re = update(sentence,parameters);
+
         return null;
     }
 }
