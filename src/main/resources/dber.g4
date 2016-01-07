@@ -1,9 +1,10 @@
-grammar dber;
+grammar Dber;
 
 INT     : [0-9]+ ;
 NULL    : 'null' | 'NULL';
 VAR     : [_a-zA-Z]+[_0-9a-zA-Z]+ ;
-VALUE   : INT | NULL;
+STRING	: '\''.*'\'';
+VALUE   : INT |STRING| NULL| ;
 
 GET     : '>=';
 GT      : '>';
@@ -17,18 +18,18 @@ AND     :'&&';
 OR      :'||';
 AND_OR  : AND | OR;
 
-
-predict  : VAR OP VALUE;
-
-predicts:  (predict (AND_OR predict)*)  ;
-
-exprVar  :  '#{' VAR '}' ;
-exprSentence  :    ;
-exprIf  :  'if{'  (VAR | predicts)  '}' '->' ;
-
-
-
-
-
+//
+//predict  : VAR OP VALUE;
+//
+//predicts:  (predict (AND_OR predict)*)  ;
+//
+//exprVar  :  '#{' VAR '}' ;
+//exprSentence  :  (exprVar | ~WS)+  ;
+//exprIf  :  'if{'  (VAR | predicts)  '}' '->' exprSentence;
+//
 NEWLINE : '\r'? '\n' -> skip ;
 WS      : ( ' ' | '\t' | '\n' | '\r' )+ -> skip ;
+//
+//all		:		exprIf |exprSentence;
+//all		:VAR OP VALUE;
+all		:INT;
