@@ -23,8 +23,8 @@ public interface DaoLayer {
     List<User> findByName(@Param("name") String name);
 
     @Select({"select * from User where id in (#{ids})",
-            "if{status>0, and status = #{status} }",
-            "if{status<=0, and status = #{status} }",
-            "limit #{offset} , #{count}"})
-    List<User> findByList(@Param("ids") List<Long> ids, Integer status, int offset, int length);
+            "if{status>0 && status != 1} -> and status = #{status}",
+            "if{status<=0 } -> and status = #{status}",
+            "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
+    List<User> findByList(@Param("ids") List<Long> ids, Integer status, Integer offset, Integer length);
 }
