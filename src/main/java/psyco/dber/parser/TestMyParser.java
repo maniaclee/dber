@@ -26,7 +26,7 @@ public class TestMyParser {
         try {
 //            TestParser.StatContext re = parser.stat();  // STAGE 1
 //            System.out.println(ToStringBuilder.reflectionToString(re, ToStringStyle.MULTI_LINE_STYLE));
-            System.out.printf(ToStringBuilder.reflectionToString(parser.tell().predicts().predict(), ToStringStyle.MULTI_LINE_STYLE));
+            System.out.printf(ToStringBuilder.reflectionToString(parser.tell().predicts(), ToStringStyle.MULTI_LINE_STYLE));
 //            new TestBaseVisitor<Object>().visit(re.getRuleContext());
         } catch (Exception ex) {
             tokens.reset(); // rewind input stream
@@ -40,6 +40,6 @@ public class TestMyParser {
     @Test
     public void sdf() throws Exception {
 //        parse("select * from a where #{a} > 2");
-        parse("3 > 3 or 4 < 4 and 23 <= 233");
+        parse("3 > 3 or 4 < 4   and 33 >= 34 //shit ss ");
     }
 }

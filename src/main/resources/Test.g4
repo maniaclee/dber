@@ -18,7 +18,7 @@ predict : predict '>=' predict #Get
     ;
 AND_OR: 'and' | 'or';
 
-predicts :predict AND_OR predict
+predicts :predicts AND_OR predicts
     |predict
     ;
 
@@ -30,5 +30,13 @@ INT	:[0-9]+;    //token大写，rule小写
 
 NEWLINE : '\r'? '\n' -> skip ;
 WS      : ( ' ' | '\t' | '\n' | '\r' )+ -> skip ;
+
+
+BLOCK_COMMENT
+    : '/*' .*? '*/' -> channel(HIDDEN)
+    ;
+LINE_COMMENT
+    : '//' ~[\r\n]* -> channel(HIDDEN)
+    ;
 
 tell: predicts;
