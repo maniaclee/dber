@@ -52,6 +52,18 @@ public class DberBaseListener implements DberListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCalVar(DberParser.CalVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCalVar(DberParser.CalVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCal(DberParser.CalContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -76,13 +88,13 @@ public class DberBaseListener implements DberListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprPredict(DberParser.ExprPredictContext ctx) { }
+	@Override public void enterConstIf(DberParser.ConstIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprPredict(DberParser.ExprPredictContext ctx) { }
+	@Override public void exitConstIf(DberParser.ConstIfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -95,6 +107,78 @@ public class DberBaseListener implements DberListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAny(DberParser.AnyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprSimple(DberParser.ExprSimpleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprSimple(DberParser.ExprSimpleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredictBodyTrue(DberParser.PredictBodyTrueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredictBodyTrue(DberParser.PredictBodyTrueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredictBodyFalse(DberParser.PredictBodyFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredictBodyFalse(DberParser.PredictBodyFalseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExprPredict(DberParser.ExprPredictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExprPredict(DberParser.ExprPredictContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOp(DberParser.OpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOp(DberParser.OpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAndOr(DberParser.AndOrContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAndOr(DberParser.AndOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -38,6 +38,16 @@ public interface DberListener extends ParseTreeListener {
 	 */
 	void exitVarExpr(DberParser.VarExprContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link DberParser#calVar}.
+	 * @param ctx the parse tree
+	 */
+	void enterCalVar(DberParser.CalVarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#calVar}.
+	 * @param ctx the parse tree
+	 */
+	void exitCalVar(DberParser.CalVarContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link DberParser#cal}.
 	 * @param ctx the parse tree
 	 */
@@ -58,15 +68,15 @@ public interface DberListener extends ParseTreeListener {
 	 */
 	void exitPredict(DberParser.PredictContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DberParser#exprPredict}.
+	 * Enter a parse tree produced by {@link DberParser#constIf}.
 	 * @param ctx the parse tree
 	 */
-	void enterExprPredict(DberParser.ExprPredictContext ctx);
+	void enterConstIf(DberParser.ConstIfContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DberParser#exprPredict}.
+	 * Exit a parse tree produced by {@link DberParser#constIf}.
 	 * @param ctx the parse tree
 	 */
-	void exitExprPredict(DberParser.ExprPredictContext ctx);
+	void exitConstIf(DberParser.ConstIfContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DberParser#any}.
 	 * @param ctx the parse tree
@@ -77,6 +87,66 @@ public interface DberListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAny(DberParser.AnyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#exprSimple}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprSimple(DberParser.ExprSimpleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#exprSimple}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprSimple(DberParser.ExprSimpleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#predictBodyTrue}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredictBodyTrue(DberParser.PredictBodyTrueContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#predictBodyTrue}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredictBodyTrue(DberParser.PredictBodyTrueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#predictBodyFalse}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredictBodyFalse(DberParser.PredictBodyFalseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#predictBodyFalse}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredictBodyFalse(DberParser.PredictBodyFalseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#exprPredict}.
+	 * @param ctx the parse tree
+	 */
+	void enterExprPredict(DberParser.ExprPredictContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#exprPredict}.
+	 * @param ctx the parse tree
+	 */
+	void exitExprPredict(DberParser.ExprPredictContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#op}.
+	 * @param ctx the parse tree
+	 */
+	void enterOp(DberParser.OpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#op}.
+	 * @param ctx the parse tree
+	 */
+	void exitOp(DberParser.OpContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#andOr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAndOr(DberParser.AndOrContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#andOr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAndOr(DberParser.AndOrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DberParser#sentence}.
 	 * @param ctx the parse tree
