@@ -24,7 +24,7 @@ public class MapperHolder {
             for (Method m : c.getDeclaredMethods()) {
                 SqlDefinition sqlDefinition = SqlDefinition.parse(m);
                 if (sqlDefinition != null) {
-                    Sentence sentence = addMapping(sqlDefinition);
+                    Sentence sentence = addMapping(sqlDefinition , m );
                     Parameter[] params = m.getParameters();
                     if (params == null || params.length == 0)
                         continue;
@@ -48,12 +48,14 @@ public class MapperHolder {
         return mappers;
     }
 
-    private static Sentence addMapping(SqlDefinition sqlDefinition) {
+    private static Sentence addMapping(SqlDefinition sqlDefinition,Method m) {
         Sentence sentence = new Sentence();
         sentence.setSqlDefinition(sqlDefinition);
         sentence.setResultMapping(new BeanResultMappingHandler());
+        sentence.setReturnType(m.getReturnType());
         mappers.put(sentence.getSqlDefinition().getSqlId(), sentence);
         return sentence;
     }
+
 
 }

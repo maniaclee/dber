@@ -25,7 +25,7 @@ public class ReflectionUtils {
             }
             return (Class) typeArguments[index];
         }
-        return null;
+        return (Class) returnType;
     }
 
     public static List<String> getParameterNames(Method method) {
@@ -43,4 +43,5 @@ public class ReflectionUtils {
 
         return parameterNames;
     }
+
 }

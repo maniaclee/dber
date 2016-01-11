@@ -1,5 +1,8 @@
 package psyco.dber.mapper;
 
+import psyco.dber.utils.ReflectionUtils;
+
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,8 +14,14 @@ public class Sentence {
     SqlDefinition sqlDefinition;
     List<ParameterMapper> parameterMappers;
     ResultMapping resultMapping;
+    Type returnType;
 
     private static Pattern pattern = Pattern.compile("#\\{([^\\{\\}]+)\\}");
+
+    /**
+     * only for insert
+     */
+    KeySelector keySelector;
 
     public Object[] parseParameters(Object[] parameters) {
         return null;
@@ -22,15 +31,14 @@ public class Sentence {
         Matcher m = pattern.matcher(sqlDefinition.getSql());
         while (m.find()) {
             String param = m.group(1);
-//            m.re
+            //            m.re
         }
     }
 
 
-    /**
-     * only for insert
-     */
-    KeySelector keySelector;
+    public Class findActualReturnType() {
+        return ReflectionUtils.getGenericType(returnType, 0);
+    }
 
 
     public List<ParameterMapper> getParameterMappers() {
@@ -63,5 +71,13 @@ public class Sentence {
 
     public void setKeySelector(KeySelector keySelector) {
         this.keySelector = keySelector;
+    }
+
+    public Type getReturnType() {
+        return returnType;
+    }
+
+    public void setReturnType(Type returnType) {
+        this.returnType = returnType;
     }
 }

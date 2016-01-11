@@ -1,11 +1,11 @@
 package psyco.dber.spring;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.mapper.SqlDelegate;
 import psyco.dber.parser.EntityConvertor;
-import psyco.dber.utils.ReflectionUtils;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -17,7 +17,6 @@ import java.util.List;
  */
 public class SqlDelegaetImpl implements SqlDelegate {
     JdbcTemplate template;
-    EntityConvertor entityConvertor;
     private volatile boolean inited = false;
 
     public SqlDelegaetImpl(JdbcTemplate template) {
@@ -28,15 +27,17 @@ public class SqlDelegaetImpl implements SqlDelegate {
         if (!inited) {
             synchronized (this) {
                 if (!inited) {
-                    entityConvertor = new EntityConvertor(ReflectionUtils.getGenericType(sentence.getSqlDefinition().getReturnType(), 0));
+                    //                    entityConvertor = new EntityConvertor(ReflectionUtils.getGenericType(sentence.getSqlDefinition().getReturnType(), 0));
                     inited = true;
                 }
             }
         }
-        return template.query(sentence.getSqlDefinition().getSql(), parameters, new EntityMapper<Object>());
+        return template.query(sentence.getSqlDefinition().getSql(), parameters, new BeanPropertyRowMapper(sentence.findActualReturnType()));
     }
 
+    @Deprecated
     private class EntityMapper<T> implements RowMapper<T> {
+        EntityConvertor entityConvertor;
 
         public T mapRow(ResultSet rs, int rowNum) throws SQLException {
             ResultSetMetaData meta = rs.getMetaData();
@@ -46,7 +47,7 @@ public class SqlDelegaetImpl implements SqlDelegate {
                 for (int i = 1; i <= count; i++) {
                     Object col = rs.getObject(i);
                     if (col != null)
-                        entityConvertor.setValue(meta.getColumnName(i),col, re);
+                        entityConvertor.setValue(meta.getColumnName(i), col, re);
                 }
                 return (T) re;
             } catch (Exception e) {
@@ -58,15 +59,15 @@ public class SqlDelegaetImpl implements SqlDelegate {
 
 
     public int update(Sentence sentence, Object[] parameters) {
-        return template.update(sentence.getSqlDefinition().getSql(),parameters);
+        return template.update(sentence.getSqlDefinition().getSql(), parameters);
     }
 
     public int delete(Sentence sentence, Object[] parameters) {
-        return delete(sentence,parameters);
+        return delete(sentence, parameters);
     }
 
     public Object insert(Sentence sentence, Object[] parameters) {
-        int re = update(sentence,parameters);
+        int re = update(sentence, parameters);
 
         return null;
     }

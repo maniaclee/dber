@@ -8,7 +8,6 @@ import psyco.dber.anno.Update;
 import psyco.dber.exception.MappingException;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 /**
  * Created by peng on 15/12/29.
@@ -17,7 +16,6 @@ public class SqlDefinition {
     String sqlId;
     String sql;
     SqlType type;
-    Type returnType;
 
     public static SqlDefinition parse(Method m) throws MappingException {
         String sql = null;
@@ -42,7 +40,6 @@ public class SqlDefinition {
         sqlDefinition.setSql(sql);
         sqlDefinition.setSqlId(generateId(m));
         sqlDefinition.setType(type);
-        sqlDefinition.setReturnType(m.getGenericReturnType());
         return sqlDefinition;
     }
 
@@ -74,11 +71,4 @@ public class SqlDefinition {
         this.type = type;
     }
 
-    public Type getReturnType() {
-        return returnType;
-    }
-
-    public void setReturnType(Type returnType) {
-        this.returnType = returnType;
-    }
 }
