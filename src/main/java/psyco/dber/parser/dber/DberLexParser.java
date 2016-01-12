@@ -1,31 +1,63 @@
 package psyco.dber.parser.dber;
 
+import com.google.common.collect.Lists;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.junit.Test;
 import psyco.dber.parser.dber.lex.DberLexer;
 import psyco.dber.parser.dber.lex.DberListener;
 import psyco.dber.parser.dber.lex.DberParser;
+
+import java.util.List;
 
 /**
  * Created by lipeng on 16/1/12.
  */
 public class DberLexParser {
 
-    public static void sdf(String input) throws Exception {
+    public static DberContext parse(String input) throws Exception {
         DberLexer lexer = new DberLexer(new ANTLRInputStream(input));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         DberParser parser = new DberParser(tokens);
         DberParser.SentenceContext tree = parser.sentence(); // parse a compilationUnit
+        System.out.println(input.length());
+        System.out.println(tree.getStart().getCharPositionInLine());
+        System.out.println(tree.getStop().getCharPositionInLine());
+        System.out.println(tree.getStop().getText());
 
+        System.out.println(tree.exprPredict().get(0).toStringTree());
         DberParserListener extractor = new DberParserListener();
         ParseTreeWalker.DEFAULT.walk(extractor, tree);
+        return new DberContext(extractor.getList(), input);
+    }
+
+
+    @Test
+    public void test() throws Exception {
+        String s = "select * from ${tableName.shit} where  if{a >3 && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}} shit";
+        DberContext ct = parse(s);
     }
 
     public static class DberParserListener implements DberListener {
+        List<ParserRuleContext> list = Lists.newArrayList();
+
+        public List<ParserRuleContext> getList() {
+            return list;
+        }
+
+        @Override
+        public void exitExprSimple(DberParser.ExprSimpleContext ctx) {
+            list.add(ctx);
+        }
+
+        @Override
+        public void enterExprPredict(DberParser.ExprPredictContext ctx) {
+            list.add(ctx);
+        }
 
         @Override
         public void enterNum(DberParser.NumContext ctx) {
@@ -113,11 +145,6 @@ public class DberLexParser {
         }
 
         @Override
-        public void exitExprSimple(DberParser.ExprSimpleContext ctx) {
-
-        }
-
-        @Override
         public void enterPredictBodyTrue(DberParser.PredictBodyTrueContext ctx) {
 
         }
@@ -134,11 +161,6 @@ public class DberLexParser {
 
         @Override
         public void exitPredictBodyFalse(DberParser.PredictBodyFalseContext ctx) {
-
-        }
-
-        @Override
-        public void enterExprPredict(DberParser.ExprPredictContext ctx) {
 
         }
 

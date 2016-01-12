@@ -9,14 +9,15 @@ grammar Dber;
 //ANY : . ;
 
 
-
-INT	:[0-9]+;    //token大写，rule小写
+INT	:[0-9]+;  //token大写，rule小写
 LONG:INT 'l';
 ID : [a-zA-Z_] [a-zA-Z0-9_]* ;
 NULL    : 'null' | 'NULL';
 STRING	: '\''.*?'\'';
 
-num :INT | LONG;
+num :INT    //{java.lang.Number x = $INT.int;}
+    | LONG // {java.lang.Number x = java.lang.Long.parseLong($LONG.text);}
+    ;
 value   : num |STRING| NULL ;
 
 VAR_PREFIX : '#' | '$';

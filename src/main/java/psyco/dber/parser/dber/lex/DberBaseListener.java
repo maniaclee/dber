@@ -1,6 +1,8 @@
-package psyco.dber.parser.dber.lex;// Generated from Dber.g4 by ANTLR 4.5
+// Generated from Dber.g4 by ANTLR 4.5
+package psyco.dber.parser.dber.lex;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
