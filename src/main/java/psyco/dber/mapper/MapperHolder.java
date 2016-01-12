@@ -1,6 +1,7 @@
 package psyco.dber.mapper;
 
 import com.google.common.collect.Maps;
+import psyco.dber.anno.Key;
 import psyco.dber.anno.Param;
 import psyco.dber.exception.MappingException;
 import psyco.dber.utils.ReflectionUtils;
@@ -29,12 +30,14 @@ public class MapperHolder {
     private static Sentence addMapping(SqlDefinition sqlDefinition, Method m) {
         if (sqlDefinition == null)
             return null;
+
         Sentence sentence = new Sentence();
         sentence.setSqlDefinition(sqlDefinition);
-        sentence.setResultMapping(new BeanResultMappingHandler());
         sentence.setReturnType(m.getReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
+        sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
+
         /** register to mappers */
         mappers.put(sentence.getSqlDefinition().getSqlId(), sentence);
         return sentence;

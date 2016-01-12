@@ -13,11 +13,11 @@ import static java.lang.annotation.ElementType.METHOD;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Key {
 
-    boolean fromDb() default true;
+    int Type_DB = 1;
+    int Type_Entity = 1;
 
-    /**
-     * id property of entity
-     */
-    String fromEntity() default "";
+    String value() default "SELECT @@IDENTITY";
+
+    int type() default Type_DB;
 
 }
