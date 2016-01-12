@@ -11,5 +11,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Param {
+    int COMMON = 0;
+    int ENITY = 1;
+
     String value();
+
+    int type() default COMMON;
 }

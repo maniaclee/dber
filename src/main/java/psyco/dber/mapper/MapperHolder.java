@@ -6,9 +6,7 @@ import psyco.dber.anno.Param;
 import psyco.dber.exception.MappingException;
 import psyco.dber.utils.ReflectionUtils;
 
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -58,6 +56,16 @@ public class MapperHolder {
 
         /** plan B */
         if (result == null || result.isEmpty()) {
+            Type[] ts = m.getGenericParameterTypes();
+            for (int i = 0; i < ts.length; i++) {
+                Type t = ts[i];
+                if(t instanceof ParameterizedType){
+                    //TODO
+                }else{
+
+                }
+            }
+
             AnnotatedType[] types = m.getAnnotatedParameterTypes();
             for (int i = 0; i < types.length; i++) {
                 String param = types[i].getAnnotation(Param.class).value();
