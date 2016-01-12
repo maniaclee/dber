@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.Test;
 import psyco.dber.parser.dber.lex.DberLexer;
@@ -24,15 +23,9 @@ public class DberLexParser {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         DberParser parser = new DberParser(tokens);
         DberParser.SentenceContext tree = parser.sentence(); // parse a compilationUnit
-        System.out.println(input.length());
-        System.out.println(tree.getStart().getCharPositionInLine());
-        System.out.println(tree.getStop().getCharPositionInLine());
-        System.out.println(tree.getStop().getText());
-
-        System.out.println(tree.exprPredict().get(0).toStringTree());
-        DberParserListener extractor = new DberParserListener();
-        ParseTreeWalker.DEFAULT.walk(extractor, tree);
-        return new DberContext(extractor.getList(), input);
+//        DberParserListener extractor = new DberParserListener();
+//        ParseTreeWalker.DEFAULT.walk(extractor, tree);
+        return new DberContext(tree, input);
     }
 
 
