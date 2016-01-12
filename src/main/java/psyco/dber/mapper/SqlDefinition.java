@@ -1,10 +1,7 @@
 package psyco.dber.mapper;
 
 import com.google.common.base.Joiner;
-import psyco.dber.anno.Delete;
-import psyco.dber.anno.Insert;
-import psyco.dber.anno.Select;
-import psyco.dber.anno.Update;
+import psyco.dber.anno.*;
 import psyco.dber.exception.MappingException;
 
 import java.lang.reflect.Method;
@@ -32,6 +29,9 @@ public class SqlDefinition {
         } else if (m.getAnnotation(Delete.class) != null) {
             sql = m.getAnnotation(Delete.class).value();
             type = SqlType.Delete;
+        } else if (m.getAnnotation(Load.class) != null) {
+            sql = m.getAnnotation(Load.class).value();
+            type = SqlType.Load;
         }
         if (sql == null)
             return null;

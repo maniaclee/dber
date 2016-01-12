@@ -11,4 +11,9 @@ public class ParameterMapper {
     public ParameterMapper(String name) {
         this.name = name;
     }
+
+    public ParameterMapper(int index, String name) {
+        this.index = index;
+        this.name = name;
+    }
 }
