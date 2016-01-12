@@ -16,9 +16,10 @@ public class DberParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, INT=7, LONG=8, ID=9, NULL=10, 
-		STRING=11, VAR_PREFIX=12, GET=13, GT=14, LT=15, LET=16, EQ=17, NOT_EQ=18, 
-		AND=19, OR=20, NEWLINE=21, WS=22, EMPTY=23, BLOCK_COMMENT=24, LINE_COMMENT=25;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, INT=8, LONG=9, 
+		ID=10, NULL=11, STRING=12, VAR_PREFIX=13, GET=14, GT=15, LT=16, LET=17, 
+		EQ=18, NOT_EQ=19, AND=20, OR=21, NEWLINE=22, WS=23, EMPTY=24, BLOCK_COMMENT=25, 
+		LINE_COMMENT=26;
 	public static final int
 		RULE_num = 0, RULE_value = 1, RULE_varExpr = 2, RULE_calVar = 3, RULE_cal = 4, 
 		RULE_predict = 5, RULE_constIf = 6, RULE_any = 7, RULE_exprSimple = 8, 
@@ -31,12 +32,12 @@ public class DberParser extends Parser {
 	};
 
 	private static final String[] _LITERAL_NAMES = {
-		null, "'{'", "'}'", "'if'", "'*'", "'->'", "'else'", null, null, null, 
-		null, null, null, "'>='", "'>'", "'<'", "'<='", "'='", "'!='", "'&&'", 
+		null, "'{'", "'.'", "'}'", "'if'", "'*'", "'->'", "'else'", null, null, 
+		null, null, null, null, "'>='", "'>'", "'<'", "'<='", "'='", "'!='", "'&&'", 
 		"'||'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
-		null, null, null, null, null, null, null, "INT", "LONG", "ID", "NULL", 
+		null, null, null, null, null, null, null, null, "INT", "LONG", "ID", "NULL", 
 		"STRING", "VAR_PREFIX", "GET", "GT", "LT", "LET", "EQ", "NOT_EQ", "AND", 
 		"OR", "NEWLINE", "WS", "EMPTY", "BLOCK_COMMENT", "LINE_COMMENT"
 	};
@@ -197,8 +198,13 @@ public class DberParser extends Parser {
 	}
 
 	public static class VarExprContext extends ParserRuleContext {
+		public Token ID;
+		public List<Token> vars = new ArrayList<Token>();
 		public TerminalNode VAR_PREFIX() { return getToken(DberParser.VAR_PREFIX, 0); }
-		public TerminalNode ID() { return getToken(DberParser.ID, 0); }
+		public List<TerminalNode> ID() { return getTokens(DberParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(DberParser.ID, i);
+		}
 		public VarExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -216,6 +222,7 @@ public class DberParser extends Parser {
 	public final VarExprContext varExpr() throws RecognitionException {
 		VarExprContext _localctx = new VarExprContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_varExpr);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -224,9 +231,27 @@ public class DberParser extends Parser {
 			setState(38);
 			match(T__0);
 			setState(39);
-			match(ID);
-			setState(40);
-			match(T__1);
+			((VarExprContext)_localctx).ID = match(ID);
+			((VarExprContext)_localctx).vars.add(((VarExprContext)_localctx).ID);
+			setState(44);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__1) {
+				{
+				{
+				setState(40);
+				match(T__1);
+				setState(41);
+				((VarExprContext)_localctx).ID = match(ID);
+				((VarExprContext)_localctx).vars.add(((VarExprContext)_localctx).ID);
+				}
+				}
+				setState(46);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(47);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -263,7 +288,7 @@ public class DberParser extends Parser {
 		CalVarContext _localctx = new CalVarContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_calVar);
 		try {
-			setState(44);
+			setState(51);
 			switch (_input.LA(1)) {
 			case INT:
 			case LONG:
@@ -271,14 +296,14 @@ public class DberParser extends Parser {
 			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(42);
+				setState(49);
 				value();
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(43);
+				setState(50);
 				match(ID);
 				}
 				break;
@@ -325,23 +350,23 @@ public class DberParser extends Parser {
 		CalContext _localctx = new CalContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_cal);
 		try {
-			setState(51);
-			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			setState(58);
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(46);
+				setState(53);
 				calVar();
-				setState(47);
+				setState(54);
 				op();
-				setState(48);
+				setState(55);
 				calVar();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(50);
+				setState(57);
 				calVar();
 				}
 				break;
@@ -401,13 +426,13 @@ public class DberParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			setState(54);
+			setState(61);
 			cal();
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(62);
+			setState(69);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
@@ -416,18 +441,18 @@ public class DberParser extends Parser {
 					{
 					_localctx = new PredictContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_predict);
-					setState(56);
+					setState(63);
 					if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
-					setState(57);
+					setState(64);
 					andOr();
-					setState(58);
+					setState(65);
 					predict(3);
 					}
 					} 
 				}
-				setState(64);
+				setState(71);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
 			}
 			}
 		}
@@ -463,8 +488,8 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(65);
-			match(T__2);
+			setState(72);
+			match(T__3);
 			}
 		}
 		catch (RecognitionException re) {
@@ -497,19 +522,19 @@ public class DberParser extends Parser {
 		AnyContext _localctx = new AnyContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_any);
 		try {
-			setState(69);
-			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
+			setState(76);
+			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(67);
-				match(T__3);
+				setState(74);
+				match(T__4);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(68);
+				setState(75);
 				matchWildcard();
 				}
 				break;
@@ -551,19 +576,19 @@ public class DberParser extends Parser {
 		ExprSimpleContext _localctx = new ExprSimpleContext(_ctx, getState());
 		enterRule(_localctx, 16, RULE_exprSimple);
 		try {
-			setState(73);
-			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
+			setState(80);
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(71);
+				setState(78);
 				varExpr();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(72);
+				setState(79);
 				any();
 				}
 				break;
@@ -604,7 +629,7 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(75);
+			setState(82);
 			exprSimple();
 			}
 		}
@@ -643,7 +668,7 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(77);
+			setState(84);
 			exprSimple();
 			}
 		}
@@ -699,59 +724,59 @@ public class DberParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(79);
-			constIf();
-			setState(80);
-			match(T__0);
-			setState(81);
-			predict(0);
-			setState(82);
-			match(T__4);
 			setState(86);
+			constIf();
+			setState(87);
+			match(T__0);
+			setState(88);
+			predict(0);
+			setState(89);
+			match(T__5);
+			setState(93);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1+1 ) {
 					{
 					{
-					setState(83);
+					setState(90);
 					predictBodyTrue();
 					}
 					} 
 				}
-				setState(88);
-				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
-			}
-			setState(97);
-			_la = _input.LA(1);
-			if (_la==T__5) {
-				{
-				setState(89);
-				match(T__5);
-				setState(90);
-				match(T__4);
-				setState(94);
+				setState(95);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+			}
+			setState(104);
+			_la = _input.LA(1);
+			if (_la==T__6) {
+				{
+				setState(96);
+				match(T__6);
+				setState(97);
+				match(T__5);
+				setState(101);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 				while ( _alt!=1 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1+1 ) {
 						{
 						{
-						setState(91);
+						setState(98);
 						predictBodyFalse();
 						}
 						} 
 					}
-					setState(96);
+					setState(103);
 					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+					_alt = getInterpreter().adaptivePredict(_input,8,_ctx);
 				}
 				}
 			}
 
-			setState(99);
-			match(T__1);
+			setState(106);
+			match(T__2);
 			}
 		}
 		catch (RecognitionException re) {
@@ -793,7 +818,7 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(101);
+			setState(108);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << GET) | (1L << GT) | (1L << LT) | (1L << LET) | (1L << EQ) | (1L << NOT_EQ))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -837,7 +862,7 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(103);
+			setState(110);
 			_la = _input.LA(1);
 			if ( !(_la==AND || _la==OR) ) {
 			_errHandler.recoverInline(this);
@@ -891,31 +916,31 @@ public class DberParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(107); 
+			setState(114); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			do {
 				{
-				setState(107);
-				switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
+				setState(114);
+				switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 				case 1:
 					{
-					setState(105);
+					setState(112);
 					exprPredict();
 					}
 					break;
 				case 2:
 					{
-					setState(106);
+					setState(113);
 					exprSimple();
 					}
 					break;
 				}
 				}
-				setState(109); 
+				setState(116); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__1) | (1L << T__2) | (1L << T__3) | (1L << T__4) | (1L << T__5) | (1L << INT) | (1L << LONG) | (1L << ID) | (1L << NULL) | (1L << STRING) | (1L << VAR_PREFIX) | (1L << GET) | (1L << GT) | (1L << LT) | (1L << LET) | (1L << EQ) | (1L << NOT_EQ) | (1L << AND) | (1L << OR) | (1L << NEWLINE) | (1L << WS) | (1L << EMPTY) | (1L << BLOCK_COMMENT) | (1L << LINE_COMMENT))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__0) | (1L << T__1) | (1L << T__2) | (1L << T__3) | (1L << T__4) | (1L << T__5) | (1L << T__6) | (1L << INT) | (1L << LONG) | (1L << ID) | (1L << NULL) | (1L << STRING) | (1L << VAR_PREFIX) | (1L << GET) | (1L << GT) | (1L << LT) | (1L << LET) | (1L << EQ) | (1L << NOT_EQ) | (1L << AND) | (1L << OR) | (1L << NEWLINE) | (1L << WS) | (1L << EMPTY) | (1L << BLOCK_COMMENT) | (1L << LINE_COMMENT))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -945,33 +970,34 @@ public class DberParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\33r\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\34y\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
 		"\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\3\3\3\3\3\5\3&"+
-		"\n\3\3\4\3\4\3\4\3\4\3\4\3\5\3\5\5\5/\n\5\3\6\3\6\3\6\3\6\3\6\5\6\66\n"+
-		"\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7?\n\7\f\7\16\7B\13\7\3\b\3\b\3\t\3\t"+
-		"\5\tH\n\t\3\n\3\n\5\nL\n\n\3\13\3\13\3\f\3\f\3\r\3\r\3\r\3\r\3\r\7\rW"+
-		"\n\r\f\r\16\rZ\13\r\3\r\3\r\3\r\7\r_\n\r\f\r\16\rb\13\r\5\rd\n\r\3\r\3"+
-		"\r\3\16\3\16\3\17\3\17\3\20\3\20\6\20n\n\20\r\20\16\20o\3\20\4X`\3\f\21"+
-		"\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36\2\5\3\2\t\n\3\2\17\24\3\2\25\26"+
-		"n\2 \3\2\2\2\4%\3\2\2\2\6\'\3\2\2\2\b.\3\2\2\2\n\65\3\2\2\2\f\67\3\2\2"+
-		"\2\16C\3\2\2\2\20G\3\2\2\2\22K\3\2\2\2\24M\3\2\2\2\26O\3\2\2\2\30Q\3\2"+
-		"\2\2\32g\3\2\2\2\34i\3\2\2\2\36m\3\2\2\2 !\t\2\2\2!\3\3\2\2\2\"&\5\2\2"+
-		"\2#&\7\r\2\2$&\7\f\2\2%\"\3\2\2\2%#\3\2\2\2%$\3\2\2\2&\5\3\2\2\2\'(\7"+
-		"\16\2\2()\7\3\2\2)*\7\13\2\2*+\7\4\2\2+\7\3\2\2\2,/\5\4\3\2-/\7\13\2\2"+
-		".,\3\2\2\2.-\3\2\2\2/\t\3\2\2\2\60\61\5\b\5\2\61\62\5\32\16\2\62\63\5"+
-		"\b\5\2\63\66\3\2\2\2\64\66\5\b\5\2\65\60\3\2\2\2\65\64\3\2\2\2\66\13\3"+
-		"\2\2\2\678\b\7\1\289\5\n\6\29@\3\2\2\2:;\f\4\2\2;<\5\34\17\2<=\5\f\7\5"+
-		"=?\3\2\2\2>:\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\r\3\2\2\2B@\3\2\2"+
-		"\2CD\7\5\2\2D\17\3\2\2\2EH\7\6\2\2FH\13\2\2\2GE\3\2\2\2GF\3\2\2\2H\21"+
-		"\3\2\2\2IL\5\6\4\2JL\5\20\t\2KI\3\2\2\2KJ\3\2\2\2L\23\3\2\2\2MN\5\22\n"+
-		"\2N\25\3\2\2\2OP\5\22\n\2P\27\3\2\2\2QR\5\16\b\2RS\7\3\2\2ST\5\f\7\2T"+
-		"X\7\7\2\2UW\5\24\13\2VU\3\2\2\2WZ\3\2\2\2XY\3\2\2\2XV\3\2\2\2Yc\3\2\2"+
-		"\2ZX\3\2\2\2[\\\7\b\2\2\\`\7\7\2\2]_\5\26\f\2^]\3\2\2\2_b\3\2\2\2`a\3"+
-		"\2\2\2`^\3\2\2\2ad\3\2\2\2b`\3\2\2\2c[\3\2\2\2cd\3\2\2\2de\3\2\2\2ef\7"+
-		"\4\2\2f\31\3\2\2\2gh\t\3\2\2h\33\3\2\2\2ij\t\4\2\2j\35\3\2\2\2kn\5\30"+
-		"\r\2ln\5\22\n\2mk\3\2\2\2ml\3\2\2\2no\3\2\2\2om\3\2\2\2op\3\2\2\2p\37"+
-		"\3\2\2\2\r%.\65@GKX`cmo";
+		"\n\3\3\4\3\4\3\4\3\4\3\4\7\4-\n\4\f\4\16\4\60\13\4\3\4\3\4\3\5\3\5\5\5"+
+		"\66\n\5\3\6\3\6\3\6\3\6\3\6\5\6=\n\6\3\7\3\7\3\7\3\7\3\7\3\7\3\7\7\7F"+
+		"\n\7\f\7\16\7I\13\7\3\b\3\b\3\t\3\t\5\tO\n\t\3\n\3\n\5\nS\n\n\3\13\3\13"+
+		"\3\f\3\f\3\r\3\r\3\r\3\r\3\r\7\r^\n\r\f\r\16\ra\13\r\3\r\3\r\3\r\7\rf"+
+		"\n\r\f\r\16\ri\13\r\5\rk\n\r\3\r\3\r\3\16\3\16\3\17\3\17\3\20\3\20\6\20"+
+		"u\n\20\r\20\16\20v\3\20\4_g\3\f\21\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
+		"\36\2\5\3\2\n\13\3\2\20\25\3\2\26\27v\2 \3\2\2\2\4%\3\2\2\2\6\'\3\2\2"+
+		"\2\b\65\3\2\2\2\n<\3\2\2\2\f>\3\2\2\2\16J\3\2\2\2\20N\3\2\2\2\22R\3\2"+
+		"\2\2\24T\3\2\2\2\26V\3\2\2\2\30X\3\2\2\2\32n\3\2\2\2\34p\3\2\2\2\36t\3"+
+		"\2\2\2 !\t\2\2\2!\3\3\2\2\2\"&\5\2\2\2#&\7\16\2\2$&\7\r\2\2%\"\3\2\2\2"+
+		"%#\3\2\2\2%$\3\2\2\2&\5\3\2\2\2\'(\7\17\2\2()\7\3\2\2).\7\f\2\2*+\7\4"+
+		"\2\2+-\7\f\2\2,*\3\2\2\2-\60\3\2\2\2.,\3\2\2\2./\3\2\2\2/\61\3\2\2\2\60"+
+		".\3\2\2\2\61\62\7\5\2\2\62\7\3\2\2\2\63\66\5\4\3\2\64\66\7\f\2\2\65\63"+
+		"\3\2\2\2\65\64\3\2\2\2\66\t\3\2\2\2\678\5\b\5\289\5\32\16\29:\5\b\5\2"+
+		":=\3\2\2\2;=\5\b\5\2<\67\3\2\2\2<;\3\2\2\2=\13\3\2\2\2>?\b\7\1\2?@\5\n"+
+		"\6\2@G\3\2\2\2AB\f\4\2\2BC\5\34\17\2CD\5\f\7\5DF\3\2\2\2EA\3\2\2\2FI\3"+
+		"\2\2\2GE\3\2\2\2GH\3\2\2\2H\r\3\2\2\2IG\3\2\2\2JK\7\6\2\2K\17\3\2\2\2"+
+		"LO\7\7\2\2MO\13\2\2\2NL\3\2\2\2NM\3\2\2\2O\21\3\2\2\2PS\5\6\4\2QS\5\20"+
+		"\t\2RP\3\2\2\2RQ\3\2\2\2S\23\3\2\2\2TU\5\22\n\2U\25\3\2\2\2VW\5\22\n\2"+
+		"W\27\3\2\2\2XY\5\16\b\2YZ\7\3\2\2Z[\5\f\7\2[_\7\b\2\2\\^\5\24\13\2]\\"+
+		"\3\2\2\2^a\3\2\2\2_`\3\2\2\2_]\3\2\2\2`j\3\2\2\2a_\3\2\2\2bc\7\t\2\2c"+
+		"g\7\b\2\2df\5\26\f\2ed\3\2\2\2fi\3\2\2\2gh\3\2\2\2ge\3\2\2\2hk\3\2\2\2"+
+		"ig\3\2\2\2jb\3\2\2\2jk\3\2\2\2kl\3\2\2\2lm\7\5\2\2m\31\3\2\2\2no\t\3\2"+
+		"\2o\33\3\2\2\2pq\t\4\2\2q\35\3\2\2\2ru\5\30\r\2su\5\22\n\2tr\3\2\2\2t"+
+		"s\3\2\2\2uv\3\2\2\2vt\3\2\2\2vw\3\2\2\2w\37\3\2\2\2\16%.\65<GNR_gjtv";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

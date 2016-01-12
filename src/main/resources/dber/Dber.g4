@@ -12,7 +12,7 @@ grammar Dber;
 
 INT	:[0-9]+;    //token大写，rule小写
 LONG:INT 'l';
-ID : [a-zA-Z] [a-zA-Z0-9]* ;
+ID : [a-zA-Z_] [a-zA-Z0-9_]* ;
 NULL    : 'null' | 'NULL';
 STRING	: '\''.*?'\'';
 
@@ -20,7 +20,8 @@ num :INT | LONG;
 value   : num |STRING| NULL ;
 
 VAR_PREFIX : '#' | '$';
-varExpr: VAR_PREFIX '{' ID '}';
+varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
+//varExpr: VAR_PREFIX '{' ID '}';
 
 calVar  : value|ID;
 cal:    calVar op calVar
