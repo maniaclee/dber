@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import psyco.dber.Dber;
 import psyco.dber.spring.DberClient;
-import psyco.dber.spring.SqlDelegaetImpl;
+import psyco.dber.spring.SqlDelegateImpl;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class DalConfig {
     public Dber dber(JdbcTemplate jdbcTemplate){
         Dber dber = new Dber();
         dber.setDaoPackageToScan(Collections.singletonList("psyco"));
-        dber.setSqlDelegate(new SqlDelegaetImpl(jdbcTemplate));
+        dber.setSqlDelegate(new SqlDelegateImpl(jdbcTemplate));
         return dber;
     }
 //    @Bean

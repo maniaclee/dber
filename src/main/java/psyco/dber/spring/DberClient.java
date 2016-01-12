@@ -37,7 +37,7 @@ public class DberClient implements InitializingBean, ApplicationListener<Context
             JdbcTemplate jdbcTemplate = applicationContext.getBean(JdbcTemplate.class);
             if (jdbcTemplate == null)
                 throw new DberException("no SqlDelegate is found.");
-            dber.setSqlDelegate(new SqlDelegaetImpl(jdbcTemplate));
+            dber.setSqlDelegate(new SqlDelegateImpl(jdbcTemplate));
         }
 
 

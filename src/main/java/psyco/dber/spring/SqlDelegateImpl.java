@@ -1,5 +1,6 @@
 package psyco.dber.spring;
 
+import com.google.common.collect.Maps;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,28 +12,42 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lipeng on 16/1/4.
  */
-public class SqlDelegaetImpl implements SqlDelegate {
+public class SqlDelegateImpl implements SqlDelegate {
     JdbcTemplate template;
-    private volatile boolean inited = false;
+    private Map<Class, BeanPropertyRowMapper> rowMapperMap = Maps.newConcurrentMap();
 
-    public SqlDelegaetImpl(JdbcTemplate template) {
+    public SqlDelegateImpl(JdbcTemplate template) {
         this.template = template;
     }
 
     public List select(Sentence sentence, Object[] parameters) {
-        if (!inited) {
-            synchronized (this) {
-                if (!inited) {
-                    //                    entityConvertor = new EntityConvertor(ReflectionUtils.getGenericType(sentence.getSqlDefinition().getReturnType(), 0));
-                    inited = true;
-                }
-            }
-        }
-        return template.query(sentence.getSqlDefinition().getSql(), parameters, new BeanPropertyRowMapper(sentence.findActualReturnType()));
+        return template.query(sentence.getSqlDefinition().getSql(), parameters, findRowMapperByClass(sentence.findActualReturnType()));
+    }
+
+    public int update(Sentence sentence, Object[] parameters) {
+        return template.update(sentence.getSqlDefinition().getSql(), parameters);
+    }
+
+    public int delete(Sentence sentence, Object[] parameters) {
+        return delete(sentence, parameters);
+    }
+
+    public Object insert(Sentence sentence, Object[] parameters) {
+        int re = update(sentence, parameters);
+
+        return null;
+    }
+
+    private BeanPropertyRowMapper findRowMapperByClass(Class clz) {
+        BeanPropertyRowMapper re = rowMapperMap.get(clz);
+        if (re == null)
+            return rowMapperMap.put(clz, new BeanPropertyRowMapper(clz));
+        return re;
     }
 
     @Deprecated
@@ -57,18 +72,4 @@ public class SqlDelegaetImpl implements SqlDelegate {
         }
     }
 
-
-    public int update(Sentence sentence, Object[] parameters) {
-        return template.update(sentence.getSqlDefinition().getSql(), parameters);
-    }
-
-    public int delete(Sentence sentence, Object[] parameters) {
-        return delete(sentence, parameters);
-    }
-
-    public Object insert(Sentence sentence, Object[] parameters) {
-        int re = update(sentence, parameters);
-
-        return null;
-    }
 }
