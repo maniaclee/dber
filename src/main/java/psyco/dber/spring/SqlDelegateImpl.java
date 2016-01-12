@@ -29,6 +29,13 @@ public class SqlDelegateImpl implements SqlDelegate {
         return template.query(sentence.getSqlDefinition().getSql(), parameters, findRowMapperByClass(sentence.findActualReturnType()));
     }
 
+    public Object load(Sentence sentence, Object[] parameters) {
+        List re = select(sentence, parameters);
+        if (re == null || re.isEmpty())
+            return null;
+        return re.get(0);
+    }
+
     public int update(Sentence sentence, Object[] parameters) {
         return template.update(sentence.getSqlDefinition().getSql(), parameters);
     }
@@ -39,7 +46,6 @@ public class SqlDelegateImpl implements SqlDelegate {
 
     public Object insert(Sentence sentence, Object[] parameters) {
         int re = update(sentence, parameters);
-
         return null;
     }
 

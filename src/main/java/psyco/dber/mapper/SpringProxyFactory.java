@@ -5,6 +5,9 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import psyco.dber.exception.DberException;
 
+import java.lang.reflect.Type;
+import java.util.Objects;
+
 /**
  * Created by peng on 15/12/29.
  */
@@ -33,6 +36,15 @@ public class SpringProxyFactory implements ProxyFactory {
     private class DaoMethodInterceptor implements MethodInterceptor {
 
         public Object invoke(MethodInvocation methodInvocation) throws Throwable {
+            Object re = exec(methodInvocation);
+            Type returnType = methodInvocation.getMethod().getGenericReturnType();
+            /** handle void */
+            if (Objects.equals(void.class, returnType))
+                return null;
+            return re;
+        }
+
+        private Object exec(MethodInvocation methodInvocation) throws Exception {
             SqlDefinition sql = SqlDefinition.parse(methodInvocation.getMethod());
             Sentence sentence = MapperHolder.getMappers().get(sql.getSqlId());
             Object[] args = methodInvocation.getArguments();
@@ -45,6 +57,8 @@ public class SpringProxyFactory implements ProxyFactory {
                     return sqlDelegate.update(sentence, args);
                 case Delete:
                     return sqlDelegate.delete(sentence, args);
+                case Load:
+                    return sqlDelegate.load(sentence, args);
             }
             throw new DberException("no impl is found: " + methodInvocation.getMethod().getName());
         }

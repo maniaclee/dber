@@ -9,6 +9,8 @@ public interface SqlDelegate {
 
     List select(Sentence sentence, Object[] parameters);
 
+    Object load(Sentence sentence, Object[] parameters);
+
     int update(Sentence sentence, Object[] parameters);
 
     int delete(Sentence sentence, Object[] parameters);
