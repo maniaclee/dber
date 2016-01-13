@@ -1,11 +1,12 @@
 package psyco.dber.parser.dber;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import psyco.dber.mapper.ParameterMapper;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.parser.dber.lex.DberParser;
+import psyco.dber.utils.ReflectionUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  */
 public class DberContext {
 
+    private static final String SqlPlaceHolder = "?";
     /**
      * reverse order
      */
@@ -38,7 +40,7 @@ public class DberContext {
         return getContextByType(DberParser.ExprSimpleContext.class);
     }
 
-    public String parse(Sentence sentence, Object[] args) {
+    public String parse(Sentence sentence, Object[] args) throws Exception {
         List argResult = Lists.newLinkedList();
         for (ParserRuleContext c : ctxes) {
             if (c instanceof DberParser.ExprSimpleContext) {
@@ -50,14 +52,32 @@ public class DberContext {
         return builder.toString();
     }
 
-    private void processSimple(Sentence sentence, Object[] args, DberParser.ExprSimpleContext c, List argResult) {
+    private void processSimple(Sentence sentence, Object[] args, DberParser.ExprSimpleContext c, List argResult) throws NoSuchFieldException {
         if (c.varExpr() != null) {
             DberParser.VarExprContext var = c.varExpr();
-            List<Token> names = var.vars;
-            String name = names.get(0).getText();
-            ParameterMapper paramMapping = sentence.getParameterMappers().get(name);
-            replace(c, null);
+            argResult.add(parseVarValue(sentence, args, var));
+            replace(c, SqlPlaceHolder);
         }
+    }
+
+    private Object parseVarValue(Sentence sentence, Object[] args, DberParser.VarExprContext var) throws NoSuchFieldException {
+        List<String> names = var.vars.stream().map(v -> v.getText()).collect(Collectors.toList());
+        return extractEntityValue(getArgByName(names.get(0), sentence, args), names, var.getText());
+    }
+
+    private Object getArgByName(String name, Sentence sentence, Object[] args) {
+        ParameterMapper m = sentence.getParameterMappers().get(name);
+        Preconditions.checkArgument(m != null && m.index < args.length);
+        return args[m.index];
+    }
+
+
+    private Object extractEntityValue(Object c, List<String> props, String text) throws NoSuchFieldException {
+        Preconditions.checkArgument(props != null && !props.isEmpty(), "expression can't be empty:" + text);
+        if (props.size() > 1)
+            for (int i = 1; i < props.size(); i++)
+                c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i));
+        return c;
     }
 
     private void replace(ParserRuleContext c, String s) {

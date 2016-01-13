@@ -1,9 +1,8 @@
 package psyco.dber.utils;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import org.springframework.util.Assert;
+
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +42,35 @@ public class ReflectionUtils {
 
         return parameterNames;
     }
+    public static Field getDeclaredField(Class<?> clazz, String propertyName) throws NoSuchFieldException {
+        Assert.notNull(clazz);
+        Assert.hasText(propertyName);
+        Class superClass = clazz;
 
+        while(superClass != Object.class) {
+            try {
+                return superClass.getDeclaredField(propertyName);
+            } catch (NoSuchFieldException var4) {
+                superClass = superClass.getSuperclass();
+            }
+        }
+
+        throw new NoSuchFieldException("No such field: " + clazz.getName() + '.' + propertyName);
+    }
+    public static void setDeclaredFieldValue(Object object, String propertyName, Object newValue) throws NoSuchFieldException {
+        Assert.notNull(object);
+        Assert.hasText(propertyName);
+        Field field = getDeclaredField(object.getClass(), propertyName);
+        boolean accessible = field.isAccessible();
+        field.setAccessible(true);
+
+        try {
+            field.set(object, newValue);
+        } catch (IllegalAccessException var9) {
+            throw new NoSuchFieldException("No such field: " + object.getClass() + '.' + propertyName);
+        } finally {
+            field.setAccessible(accessible);
+        }
+
+    }
 }
