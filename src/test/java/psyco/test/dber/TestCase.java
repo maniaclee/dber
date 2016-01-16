@@ -45,5 +45,7 @@ public class TestCase {
             //        for(User u : daoLayer.findByName("root")){
             System.out.println(ToStringBuilder.reflectionToString(u));
         }
+        List<User> re =daoLayer.findByName("root");
+        System.out.println(re.get(0));
     }
 }

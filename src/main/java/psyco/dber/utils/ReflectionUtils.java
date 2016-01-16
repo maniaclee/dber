@@ -1,5 +1,6 @@
 package psyco.dber.utils;
 
+import com.google.common.collect.Lists;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.*;
@@ -33,7 +34,8 @@ public class ReflectionUtils {
 
         for (Parameter parameter : parameters) {
             if (!parameter.isNamePresent()) {
-                throw new IllegalArgumentException("Parameter names are not present!");
+//                throw new IllegalArgumentException("Parameter names are not present!");
+                return Lists.newLinkedList();
             }
 
             String parameterName = parameter.getName();

@@ -26,6 +26,7 @@ public class DberLexParser {
     public void test() throws Exception {
         String s = "select * from ${tableName.shit} where  if{a >3 && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}} shit";
         DberContext ct = parse(s);
+        ct.parse(new Object[]{});
     }
 
 }

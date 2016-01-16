@@ -1,12 +1,14 @@
 package psyco.dber.mapper;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import psyco.dber.anno.Key;
 import psyco.dber.anno.Param;
 import psyco.dber.exception.MappingException;
 import psyco.dber.utils.ReflectionUtils;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +36,8 @@ public class MapperHolder {
         sentence.setReturnType(m.getReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
-        sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
+        if (m.getAnnotation(Key.class) != null)
+            sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
 
         /** register to mappers */
         mappers.put(sentence.getSqlDefinition().getSqlId(), sentence);
@@ -55,22 +58,27 @@ public class MapperHolder {
         }
 
         /** plan B */
-        if (result == null || result.isEmpty()) {
-            Type[] ts = m.getGenericParameterTypes();
-            for (int i = 0; i < ts.length; i++) {
-                Type t = ts[i];
-                if(t instanceof ParameterizedType){
-                    //TODO
-                }else{
+        if (result.isEmpty()) {
+            Parameter[] ps = m.getParameters();
+//            Annotation[][] parameterAnnotations = m.getParameterAnnotations();
+//            for (int i = 0; i <parameterAnnotations.length ; i++) {
+//                Annotation[] annotations = parameterAnnotations[i];
+//                for(Annotation annotation : annotations){
+//                    if(annotation instanceof Param){
+//                        String paramName = ((Param) annotation).value();
+//                        result.put(paramName, new ParameterMapper(i, paramName));
+//                    }
+//                }
+//            }
 
+            for (int i = 0; i < ps.length; i++) {
+                Parameter p = ps[i];
+                Param param = p.getAnnotation(Param.class);
+                if (param != null) {
+                    result.put(param.value(), new ParameterMapper(i, param.value()));
                 }
             }
-
-            AnnotatedType[] types = m.getAnnotatedParameterTypes();
-            for (int i = 0; i < types.length; i++) {
-                String param = types[i].getAnnotation(Param.class).value();
-                result.put(param, new ParameterMapper(i, param));
-            }
+            Preconditions.checkArgument(result.isEmpty() || result.size() == ps.length,"parameter mapping with @Param numbers are not right :" + m.getName());
         }
         return result;
     }

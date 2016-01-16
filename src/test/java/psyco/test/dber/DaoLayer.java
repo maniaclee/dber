@@ -26,5 +26,5 @@ public interface DaoLayer {
             "if{status>0 && status != 1-> and status = #{status} else-> } ",
             "if{status<=0 } -> and status = #{status}",
             "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
-    List<User> findByList(@Param("ids") List<Long> ids, Integer status, Integer offset, Integer length);
+    List<User> findByList(List<Long> ids, Integer status, Integer offset, Integer length);
 }
