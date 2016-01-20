@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import psyco.dber.parser.dber.DberContext;
 import psyco.test.DalConfig;
 import psyco.test.dber.entity.User;
 
@@ -45,7 +46,8 @@ public class TestCase {
             //        for(User u : daoLayer.findByName("root")){
             System.out.println(ToStringBuilder.reflectionToString(u));
         }
-        List<User> re =daoLayer.findByName("root");
-        System.out.println(re.get(0));
+//        List<User> re =daoLayer.findByName("root");
+//        System.out.println(re.get(0));
     }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.mapper.SqlDelegate;
 import psyco.dber.parser.EntityConvertor;
+import psyco.dber.parser.dber.DberContext;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -26,7 +27,8 @@ public class SqlDelegateImpl implements SqlDelegate {
     }
 
     public List select(Sentence sentence, Object[] parameters) {
-        return template.query(sentence.getSqlDefinition().getSql(), parameters, findRowMapperByClass(sentence.findActualReturnType()));
+        DberContext.ParseHandler re = sentence.getDberContext().parse(parameters);
+        return template.query(re.getSql(), re.getArgs(), findRowMapperByClass(sentence.findActualReturnType()));
     }
 
     public Object load(Sentence sentence, Object[] parameters) {
@@ -37,7 +39,8 @@ public class SqlDelegateImpl implements SqlDelegate {
     }
 
     public int update(Sentence sentence, Object[] parameters) {
-        return template.update(sentence.getSqlDefinition().getSql(), parameters);
+        DberContext.ParseHandler re = sentence.getDberContext().parse(parameters);
+        return template.update(re.getSql(), re.getArgs());
     }
 
     public int delete(Sentence sentence, Object[] parameters) {

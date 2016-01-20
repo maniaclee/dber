@@ -1,5 +1,6 @@
 package psyco.dber.mapper;
 
+import psyco.dber.parser.dber.DberContext;
 import psyco.dber.utils.ReflectionUtils;
 
 import java.lang.reflect.Type;
@@ -14,6 +15,7 @@ public class Sentence {
     Map<String, ParameterMapper> parameterMappers;
     ResultMapping resultMapping;
     Type returnType;
+    DberContext dberContext;
 
     private static Pattern pattern = Pattern.compile("#\\{([^\\{\\}]+)\\}");
 
@@ -68,5 +70,13 @@ public class Sentence {
 
     public void setReturnType(Type returnType) {
         this.returnType = returnType;
+    }
+
+    public DberContext getDberContext() {
+        return dberContext;
+    }
+
+    public void setDberContext(DberContext dberContext) {
+        this.dberContext = dberContext;
     }
 }

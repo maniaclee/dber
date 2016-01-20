@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import psyco.dber.anno.Key;
 import psyco.dber.anno.Param;
-import psyco.dber.exception.MappingException;
+import psyco.dber.parser.dber.DberContext;
 import psyco.dber.utils.ReflectionUtils;
 
 import java.lang.reflect.Method;
@@ -21,13 +21,13 @@ public class MapperHolder {
 
     static Map<String, Sentence> mappers = new ConcurrentHashMap<String, Sentence>();
 
-    public static void parse(Set<Class<?>> clz) throws MappingException {
+    public static void parse(Set<Class<?>> clz) throws Exception {
         for (Class<?> c : clz)
             for (Method m : c.getDeclaredMethods())
                 addMapping(SqlDefinition.parse(m), m);
     }
 
-    private static Sentence addMapping(SqlDefinition sqlDefinition, Method m) {
+    private static Sentence addMapping(SqlDefinition sqlDefinition, Method m) throws Exception {
         if (sqlDefinition == null)
             return null;
 
@@ -36,6 +36,7 @@ public class MapperHolder {
         sentence.setReturnType(m.getGenericReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
+        sentence.setDberContext(DberContext.getInstance(sentence.getSqlDefinition().getSql()));
         if (m.getAnnotation(Key.class) != null)
             sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
 
@@ -60,16 +61,16 @@ public class MapperHolder {
         /** plan B */
         if (result.isEmpty()) {
             Parameter[] ps = m.getParameters();
-//            Annotation[][] parameterAnnotations = m.getParameterAnnotations();
-//            for (int i = 0; i <parameterAnnotations.length ; i++) {
-//                Annotation[] annotations = parameterAnnotations[i];
-//                for(Annotation annotation : annotations){
-//                    if(annotation instanceof Param){
-//                        String paramName = ((Param) annotation).value();
-//                        result.put(paramName, new ParameterMapper(i, paramName));
-//                    }
-//                }
-//            }
+            //            Annotation[][] parameterAnnotations = m.getParameterAnnotations();
+            //            for (int i = 0; i <parameterAnnotations.length ; i++) {
+            //                Annotation[] annotations = parameterAnnotations[i];
+            //                for(Annotation annotation : annotations){
+            //                    if(annotation instanceof Param){
+            //                        String paramName = ((Param) annotation).value();
+            //                        result.put(paramName, new ParameterMapper(i, paramName));
+            //                    }
+            //                }
+            //            }
 
             for (int i = 0; i < ps.length; i++) {
                 Parameter p = ps[i];
@@ -78,7 +79,7 @@ public class MapperHolder {
                     result.put(param.value(), new ParameterMapper(i, param.value()));
                 }
             }
-            Preconditions.checkArgument(result.isEmpty() || result.size() == ps.length,"parameter mapping with @Param numbers are not right :" + m.getName());
+            Preconditions.checkArgument(result.isEmpty() || result.size() == ps.length, "parameter mapping with @Param numbers are not right :" + m.getName());
         }
         return result;
     }

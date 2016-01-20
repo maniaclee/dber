@@ -2,9 +2,12 @@ package psyco.dber.parser.dber;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import psyco.dber.mapper.ParameterMapper;
 import psyco.dber.mapper.Sentence;
+import psyco.dber.parser.dber.lex.DberLexer;
 import psyco.dber.parser.dber.lex.DberParser;
 import psyco.dber.utils.ReflectionUtils;
 
@@ -37,14 +40,29 @@ public class DberContext {
         this.sentence = sentence;
     }
 
-    public ParseHandler parse(Object[] args) throws Exception {
+    public static DberContext getInstance(String input) throws Exception {
+        DberLexer lexer = new DberLexer(new ANTLRInputStream(input));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        DberParser parser = new DberParser(tokens);
+        DberParser.SentenceContext tree = parser.sentence(); // parse a compilationUnit
+        //        DberParserListener extractor = new DberParserListener();
+        //        ParseTreeWalker.DEFAULT.walk(extractor, tree);
+        return new DberContext(tree, input);
+    }
+
+    public ParseHandler parse(Object[] args) {
         ParseHandler handler = new ParseHandler(input);
-        for (ParserRuleContext c : ctxes) {
-            if (c instanceof DberParser.ExprSimpleContext) {
-                processSimple(args, (DberParser.ExprSimpleContext) c, handler);
-            } else if (c instanceof DberParser.ExprPredictContext) {
-                processPredict(args, (DberParser.ExprPredictContext) c, handler);
+        try {
+            for (ParserRuleContext c : ctxes) {
+                if (c instanceof DberParser.ExprSimpleContext) {
+                    processSimple(args, (DberParser.ExprSimpleContext) c, handler);
+                } else if (c instanceof DberParser.ExprPredictContext) {
+                    processPredict(args, (DberParser.ExprPredictContext) c, handler);
+                }
             }
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return handler;
     }
@@ -101,8 +119,8 @@ public class DberContext {
     }
 
     private boolean cal(DberParser.CalContext cal, Object[] args) {
-        if(cal.op()==null){
-            Preconditions.checkArgument(cal.calVar().size()==1);
+        if (cal.op() == null) {
+            Preconditions.checkArgument(cal.calVar().size() == 1);
             DberParser.CalVarContext c = cal.calVar().get(0);
 
         }
@@ -125,12 +143,21 @@ public class DberContext {
     }
 
     public static class ParseHandler {
-        public StringBuilder stringBuilder;
-        public List args = Lists.newLinkedList();
+        private StringBuilder stringBuilder;
+        private List args = Lists.newLinkedList();
+
+        public String getSql() {
+            return stringBuilder.toString();
+        }
+
+        public Object[] getArgs() {
+            return args.toArray();
+        }
 
         public ParseHandler(String s) {
             this.stringBuilder = new StringBuilder(s);
         }
     }
+
 
 }
