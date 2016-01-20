@@ -51,8 +51,10 @@ public class SqlDelegateImpl implements SqlDelegate {
 
     private BeanPropertyRowMapper findRowMapperByClass(Class clz) {
         BeanPropertyRowMapper re = rowMapperMap.get(clz);
-        if (re == null)
-            return rowMapperMap.put(clz, new BeanPropertyRowMapper(clz));
+        if (re == null) {
+            re = new BeanPropertyRowMapper(clz);
+            rowMapperMap.put(clz, re);
+        }
         return re;
     }
 
