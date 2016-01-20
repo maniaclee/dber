@@ -33,7 +33,7 @@ public class MapperHolder {
 
         Sentence sentence = new Sentence();
         sentence.setSqlDefinition(sqlDefinition);
-        sentence.setReturnType(m.getReturnType());
+        sentence.setReturnType(m.getGenericReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
         if (m.getAnnotation(Key.class) != null)
