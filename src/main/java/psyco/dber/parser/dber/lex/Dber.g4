@@ -37,7 +37,7 @@ predict: predict andOr predict
 
 constIf :'if'; //IF 不能在g4中定义，转化为java src会挂掉
 
-any: '*'|.; //antlr 不识别*
+any: '*'|'?'|','|.; //antlr 不识别*
 exprSimple:varExpr|any;
 predictBodyTrue :exprSimple;
 predictBodyFalse :exprSimple;

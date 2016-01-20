@@ -22,7 +22,7 @@ public interface DaoLayer {
     @Select("select * from User where name = #{name} ")
     List<User> findByName(@Param("name") String name);
 
-    @Select({"select * from User where id in (#{ids})",
+    @Select({"select * from User where id in #{ids}",
             "if{status>0 && status != 1-> and status = #{status} else-> } ",
             "if{status<=0 } -> and status = #{status}",
             "if{offset != null && length !=null } -> limit #{offset} , #{count}"})

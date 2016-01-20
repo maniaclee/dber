@@ -47,6 +47,7 @@ public class DberContext {
         DberParser.SentenceContext tree = parser.sentence(); // parse a compilationUnit
         //        DberParserListener extractor = new DberParserListener();
         //        ParseTreeWalker.DEFAULT.walk(extractor, tree);
+        System.out.println("[dber] parsing : " + input);
         return new DberContext(tree, input);
     }
 
@@ -60,6 +61,8 @@ public class DberContext {
                     processPredict(args, (DberParser.ExprPredictContext) c, handler);
                 }
             }
+            if(handler.getArgList().isEmpty())
+                handler.setArgList(Lists.newArrayList(args));
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -153,6 +156,14 @@ public class DberContext {
         public Object[] getArgs() {
             return args.toArray();
         }
+
+        public List getArgList() {
+            return args;
+        }
+        public void setArgList(List argList) {
+            this.args = argList;
+        }
+
 
         public ParseHandler(String s) {
             this.stringBuilder = new StringBuilder(s);
