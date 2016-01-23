@@ -24,7 +24,8 @@ VAR_PREFIX : '#' | '$';
 varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
 //varExpr: VAR_PREFIX '{' ID '}';
 
-calVar  : value|ID;
+calVar  : vars +=ID ('.' vars+=ID)*
+        |value;
 cal:    calVar op calVar
         |calVar
         ;       //a > 3  , 3==2

@@ -42,8 +42,9 @@ public class TestCase {
         //            System.out.println(m);
         //        }
         //        System.out.println(a);
-        for (User u : daoLayer.find(41)) {
-            //        for(User u : daoLayer.findByName("root")){
+//        for (User u : daoLayer.find(41)) {
+//        for (User u : daoLayer.findByName("root")) {
+        for (User u : daoLayer.findByNameAndLevel("test", null)) {
             System.out.println(ToStringBuilder.reflectionToString(u));
         }
 //        List<User> re =daoLayer.findByName("root");

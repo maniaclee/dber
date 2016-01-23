@@ -22,9 +22,15 @@ public interface DaoLayer {
     @Select("select * from User where name = #{name} ")
     List<User> findByName(@Param("name") String name);
 
-    @Select({"select * from User where id in #{ids}",
-            "if{status>0 && status != 1-> and status = #{status} else-> } ",
-            "if{status<=0 } -> and status = #{status}",
-            "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
-    List<User> findByList(List<Long> ids, Integer status, Integer offset, Integer length);
+    @Select({"select * from User where name = #{name} ",
+            "if{level !=null ->  and level = #{level} }"})
+    List<User> findByNameAndLevel(@Param("name") String name, @Param("level") Integer level);
+
+//    @Select({"select * from User where id in #{ids}",
+//            "if{status>0 && status != 1-> and status = #{status} else-> } ",
+//            "if{status<=0 } -> and status = #{status}",
+//            "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
+//    List<User> findByList(List<Long> ids, Integer status, Integer offset, Integer length);
+
+
 }

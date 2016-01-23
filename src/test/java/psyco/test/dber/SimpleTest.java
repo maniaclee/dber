@@ -30,7 +30,7 @@ public class SimpleTest {
     public void context() throws Exception {
         //        String s = "select * from ${tableName.shit} where  if{a >3 && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}} shit";
         String s = "select * from User";
-        DberContext ct = DberContext.getInstance(s);
+        DberContext ct = DberContext.getInstance(s,null);
         DberContext.ParseHandler re = ct.parse(new Object[]{});
         System.out.println(ToStringBuilder.reflectionToString(re));
     }

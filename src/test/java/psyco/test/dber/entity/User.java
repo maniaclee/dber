@@ -9,7 +9,7 @@ public class User {
     long id;
     String name;
     Date gmtCreate;
-    int sex;
+    Integer sex;
     String email;
     String imageThumbUrl;
 
@@ -37,11 +37,11 @@ public class User {
         this.gmtCreate = gmtCreate;
     }
 
-    public int getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 

@@ -27,6 +27,8 @@ public class SqlDelegateImpl implements SqlDelegate {
     }
 
     public List select(Sentence sentence, Object[] parameters) {
+        if(sentence.getParameterMappers()==null || sentence.getParameterMappers().isEmpty())
+            return template.query(sentence.getSqlDefinition().getSql(), parameters, findRowMapperByClass(sentence.findActualReturnType()));
         DberContext.ParseHandler re = sentence.getDberContext().parse(parameters);
         return template.query(re.getSql(), re.getArgs(), findRowMapperByClass(sentence.findActualReturnType()));
     }

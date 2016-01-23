@@ -7,6 +7,7 @@ import psyco.dber.anno.Param;
 import psyco.dber.parser.dber.DberContext;
 import psyco.dber.utils.ReflectionUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MapperHolder {
         sentence.setReturnType(m.getGenericReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
-        sentence.setDberContext(DberContext.getInstance(sentence.getSqlDefinition().getSql()));
+        sentence.setDberContext(DberContext.getInstance(sentence.getSqlDefinition().getSql(),sentence));
         if (m.getAnnotation(Key.class) != null)
             sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
 
@@ -61,22 +62,14 @@ public class MapperHolder {
         /** plan B */
         if (result.isEmpty()) {
             Parameter[] ps = m.getParameters();
-            //            Annotation[][] parameterAnnotations = m.getParameterAnnotations();
-            //            for (int i = 0; i <parameterAnnotations.length ; i++) {
-            //                Annotation[] annotations = parameterAnnotations[i];
-            //                for(Annotation annotation : annotations){
-            //                    if(annotation instanceof Param){
-            //                        String paramName = ((Param) annotation).value();
-            //                        result.put(paramName, new ParameterMapper(i, paramName));
-            //                    }
-            //                }
-            //            }
-
-            for (int i = 0; i < ps.length; i++) {
-                Parameter p = ps[i];
-                Param param = p.getAnnotation(Param.class);
-                if (param != null) {
-                    result.put(param.value(), new ParameterMapper(i, param.value()));
+            Annotation[][] parameterAnnotations = m.getParameterAnnotations();
+            for (int i = 0; i < parameterAnnotations.length; i++) {
+                Annotation[] annotations = parameterAnnotations[i];
+                for (Annotation annotation : annotations) {
+                    if (annotation instanceof Param) {
+                        String paramName = ((Param) annotation).value();
+                        result.put(paramName, new ParameterMapper(i, paramName));
+                    }
                 }
             }
             Preconditions.checkArgument(result.isEmpty() || result.size() == ps.length, "parameter mapping with @Param numbers are not right :" + m.getName());
