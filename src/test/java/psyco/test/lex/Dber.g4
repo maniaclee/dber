@@ -22,11 +22,10 @@ value   : num |STRING| NULL ;
 
 VAR_PREFIX : '#' | '$';
 varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
-//varExpr: VAR_PREFIX '{' ID '}';
 
 calVar  : vars +=ID ('.' vars+=ID)*
         |value;
-cal:    calVar op calVar
+cal:    cal op cal
         |calVar
         ;       //a > 3  , 3==2
 
@@ -38,8 +37,7 @@ predict: predict andOr predict
 
 constIf :'if'; //IF 不能在g4中定义，转化为java src会挂掉
 
-any: '*'|'?'|','|.; //antlr 不识别*
-exprSimple:varExpr|any;
+exprSimple:varExpr|.;
 predictBodyTrue :exprSimple;
 predictBodyFalse :exprSimple;
 exprPredict:  constIf '{' predict '->' predictBodyTrue*? ('else' '->'  predictBodyFalse*?)?  '}';

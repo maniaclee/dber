@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import psyco.dber.exception.DberParsingRuntimException;
 import psyco.dber.mapper.ParameterMapper;
 import psyco.dber.mapper.Sentence;
@@ -12,8 +13,6 @@ import psyco.dber.parser.dber.lex.DberLexer;
 import psyco.dber.parser.dber.lex.DberParser;
 import psyco.dber.utils.ReflectionUtils;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,6 @@ public class DberContext {
     /**
      * reverse order
      */
-    private final List<ParserRuleContext> ctxes;
     private final String input;
     private final Sentence sentence;
     private final DberParser.SentenceContext sentenceContext;
@@ -34,7 +32,6 @@ public class DberContext {
 
     public DberContext(DberParser.SentenceContext sentenceContext, String input, Sentence sentence) {
         this.sentenceContext = sentenceContext;
-        this.ctxes = reverseMerge(sentenceContext.exprPredict(), sentenceContext.exprSimple());
         this.input = input;
         this.sentence = sentence;
     }
@@ -51,13 +48,14 @@ public class DberContext {
     }
 
     public ParseHandler parse(Object[] args) {
-        ParseHandler handler = new ParseHandler(input);
+        ParseHandler handler = new ParseHandler(input, args);
         sentenceContext.children.forEach(c -> {
-            if (c instanceof DberParser.ExprSimpleContext) {
-                processSimple(args, (DberParser.ExprSimpleContext) c, handler);
+            if (c instanceof DberParser.VarExprContext) {
+                processVar((DberParser.VarExprContext) c, handler);
             } else if (c instanceof DberParser.ExprPredictContext) {
                 processPredict(args, (DberParser.ExprPredictContext) c, handler);
-            }
+            } else
+                processAny(c, handler);
         });
         if (handler.getArgList().isEmpty())
             handler.setArgList(Lists.newArrayList(args));
@@ -65,15 +63,23 @@ public class DberContext {
         return handler;
     }
 
-    private void processSimple(Object[] args, DberParser.ExprSimpleContext c, ParseHandler handler) {
-        if (c.varExpr() != null) {
-            DberParser.VarExprContext var = c.varExpr();
-            handler.args.add(parseVarValue(args, var));
-//            replace(c, SqlPlaceHolder, handler);
-            handler.addText(SqlPlaceHolder);
-        } else
-            handler.addText(c.getText());
+    private void processAny(ParseTree any, ParseHandler handler) {
+        handler.addText(any.getText());
     }
+
+    private void processSimple(DberParser.ExprSimpleContext c, ParseHandler handler) {
+        if (c.varExpr() != null) {
+            processVar(c.varExpr(), handler);
+        } else
+            processAny(c, handler);
+    }
+
+
+    private void processVar(DberParser.VarExprContext var, ParseHandler handler) {
+        handler.args.add(parseVarValue(handler.getArgsOriginal(), var));
+        handler.addText(SqlPlaceHolder);
+    }
+
 
     private Object parseVarValue(Object[] args, DberParser.VarExprContext var) {
         List<String> names = var.vars.stream().map(v -> v.getText()).collect(Collectors.toList());
@@ -118,9 +124,9 @@ public class DberContext {
 
     private void processPredict(Object[] args, DberParser.ExprPredictContext c, ParseHandler handler) {
         if (calPredict(c.predict(), args)) {
-            c.predictBodyTrue().forEach(body -> processSimple(args, body.exprSimple(), handler));
+            c.predictBodyTrue().forEach(body -> processSimple(body.exprSimple(), handler));
         } else {
-            c.predictBodyFalse().forEach(body -> processSimple(args, body.exprSimple(), handler));
+            c.predictBodyFalse().forEach(body -> processSimple(body.exprSimple(), handler));
         }
     }
 
@@ -152,7 +158,7 @@ public class DberContext {
             c.vars.forEach(id -> {
                 System.out.println("id--" + id.getClass().getName());
             });
-//            return extractEntityValue(getArgByName(c.ID().getText(), args), );
+            //            return extractEntityValue(getArgByName(c.ID().getText(), args), );
         } else if (c.value() != null) {
             return parseValue(c.value());
         }
@@ -174,22 +180,8 @@ public class DberContext {
         throw new DberParsingRuntimException("invalid value:" + v.getText());
     }
 
-    public static List<ParserRuleContext> reverseMerge(List l, List... lists) {
-        List<ParserRuleContext> re = Lists.newArrayList();
-        re.addAll(l);
-        if (lists != null) {
-            for (int i = 0; i < lists.length; i++)
-                re.addAll(lists[i]);
-        }
-        re.sort(Collections.reverseOrder(Comparator.comparingInt(p -> p.getStart().getCharPositionInLine())));
-        return re;
-    }
-
-    public <T> List<T> getContextByType(Class<T> clz) {
-        return ctxes.stream().filter(p -> p.getClass().isAssignableFrom(clz)).map(p -> (T) p).collect(Collectors.toList());
-    }
-
     public static class ParseHandler {
+        private Object[] argsOriginal;
         private StringBuilder stringBuilder;
         private List args = Lists.newLinkedList();
         private List<String> texts = Lists.newLinkedList();
@@ -199,7 +191,7 @@ public class DberContext {
         }
 
         public String getSql() {
-//            return stringBuilder.toString();
+            //            return stringBuilder.toString();
             return texts.stream().collect(Collectors.joining(" "));
         }
 
@@ -215,10 +207,23 @@ public class DberContext {
             this.args = argList;
         }
 
+        public Object[] getArgsOriginal() {
+            return argsOriginal;
+        }
+
+        public void setArgsOriginal(Object[] argsOriginal) {
+            this.argsOriginal = argsOriginal;
+        }
 
         public ParseHandler(String s) {
             this.stringBuilder = new StringBuilder(s);
         }
+
+        public ParseHandler(String s, Object[] args) {
+            this.stringBuilder = new StringBuilder(s);
+            this.argsOriginal = args;
+        }
+
     }
 
 

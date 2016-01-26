@@ -101,18 +101,6 @@ public class DberBaseListener implements DberListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAny(DberParser.AnyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAny(DberParser.AnyContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExprSimple(DberParser.ExprSimpleContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -79,16 +79,6 @@ public interface DberListener extends ParseTreeListener {
 	 */
 	void exitConstIf(DberParser.ConstIfContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DberParser#any}.
-	 * @param ctx the parse tree
-	 */
-	void enterAny(DberParser.AnyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DberParser#any}.
-	 * @param ctx the parse tree
-	 */
-	void exitAny(DberParser.AnyContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link DberParser#exprSimple}.
 	 * @param ctx the parse tree
 	 */
