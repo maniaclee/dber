@@ -23,13 +23,17 @@ value   : num |STRING| NULL ;
 VAR_PREFIX : '#' | '$';
 varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
 
-calVar  : vars +=ID ('.' vars+=ID)*
-        |value;
-cal:    calVar op calVar
+calVar  : value |(vars +=ID ('.' vars+=ID)*)
+
+//calVarElement:value|ID;
+//calVar  : vars +=calVarElement ('.' vars+=calVarElement)*
+//calVar  : varExpr | value
+        ;
+cal:    cal op cal
         |calVar
         ;       //a > 3  , 3==2
 
-ANY:    '*'|'.'|.;
+
 predict: predict andOr predict
         |cal
         ;      //a>3 && 4 > 4 or 1< a
@@ -37,7 +41,7 @@ predict: predict andOr predict
 
 constIf :'if'; //IF 不能在g4中定义，转化为java src会挂掉
 
-exprSimple:varExpr|ANY;
+exprSimple:varExpr|.;
 predictBodyTrue :exprSimple;
 predictBodyFalse :exprSimple;
 exprPredict:  constIf '{' predict '->' predictBodyTrue*? ('else' '->'  predictBodyFalse*?)?  '}';
@@ -61,13 +65,13 @@ WS      : ( ' ' | '\t' | '\n' | '\r' )+ -> skip ;
 EMPTY   : NEWLINE |WS;
 
 
-//BLOCK_COMMENT
-//    : '/*' .*? '*/' -> channel(HIDDEN)
-//    ;
-//LINE_COMMENT
-//    : '//' ~[\r\n]* -> channel(HIDDEN)
-//    ;
+BLOCK_COMMENT
+    : '/*' .*? '*/' -> channel(HIDDEN)
+    ;
+LINE_COMMENT
+    : '//' ~[\r\n]* -> channel(HIDDEN)
+    ;
 
 
-sentence :(exprPredict|varExpr|ANY)+?
+sentence :(exprPredict|varExpr|'*'|'.'|.)+?
         ;

@@ -11,4 +11,12 @@ public class DberParsingRuntimException  extends  RuntimeException{
     public DberParsingRuntimException(Throwable cause) {
         super(cause);
     }
+    public static DberParsingRuntimException build(Throwable cause) {
+        return new DberParsingRuntimException(cause);
+    }
+    public static DberParsingRuntimException build(String cause) {
+        return new DberParsingRuntimException(cause);
+    }
+
+
 }

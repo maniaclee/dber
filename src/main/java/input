@@ -1,1 +1,2 @@
+//select * from User where name = #{name}  if{#{level} !=null ->  and level = #{level} }
 select * from User where name = #{name}  if{level !=null ->  and level = #{level} }

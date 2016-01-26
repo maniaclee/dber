@@ -14,6 +14,7 @@ import psyco.dber.parser.dber.lex.DberParser;
 import psyco.dber.utils.ReflectionUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -88,7 +89,7 @@ public class DberContext {
 
     private Object getArgByName(String name, Object[] args) {
         ParameterMapper m = sentence.getParameterMappers().get(name);
-        Preconditions.checkArgument(m != null && m.index < args.length);
+        Preconditions.checkArgument(m != null && m.index < args.length, "invalid bean value:" + name);
         return args[m.index];
     }
 
@@ -106,15 +107,15 @@ public class DberContext {
         return c;
     }
 
-    private Object extractEntityValue(Object c, List<String> props) {
-        if (props.size() > 1)
-            for (int i = 1; i < props.size(); i++) {
-                try {
-                    c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i));
-                } catch (NoSuchFieldException e) {
-                    throw new DberParsingRuntimException(e);
-                }
+    private Object extractEntityValue(List<String> props, Object[] args) {
+        Object c = getArgByName(props.get(0), args);
+        for (int i = 1; i < props.size(); i++) {
+            try {
+                c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i));
+            } catch (NoSuchFieldException e) {
+                throw new DberParsingRuntimException(e);
             }
+        }
         return c;
     }
 
@@ -142,27 +143,54 @@ public class DberContext {
     }
 
     private boolean cal(DberParser.CalContext cal, Object[] args) {
+        System.out.println(cal.getText());
         if (cal.op() != null) {
-            Preconditions.checkArgument(cal.calVar().size() > 1);
-            DberParser.CalVarContext c = cal.calVar().get(0);
-
+            Preconditions.checkArgument(cal.cal().size() > 1);
+            DberParser.CalVarContext left = cal.cal(0).calVar();
+            DberParser.CalVarContext right = cal.cal(1).calVar();
+            return calOp(cal, cal.op(), left, right, args);
         } else {
-            DberParser.CalVarContext calVar = cal.calVar(0);
-            parseCalVar(calVar, args);
+            DberParser.ValueContext v = cal.calVar().value();
+            Object value = parseValue(v);
+            if (value == null)
+                return false;
+            if (value instanceof Boolean)
+                return (boolean) value;
+            throw DberParsingRuntimException.build("invalid value for boolean calculation : " + value);
         }
-        return true;
+    }
+
+    private boolean calOp(DberParser.CalContext cal, DberParser.OpContext op, DberParser.CalVarContext a, DberParser.CalVarContext b, Object[] args) {
+        Object l = parseCalVar(a, args);
+        Object r = parseCalVar(b, args);
+        if (op.EQ() != null)
+            return Objects.equals(l, r);
+        if (op.NOT_EQ() != null)
+            return !Objects.equals(l, r);
+        int compare = compare(l, r);
+        if (op.GET() != null)
+            return compare >= 0;
+        if (op.GT() != null)
+            return compare > 0;
+        if (op.LET() != null)
+            return compare <= 0;
+        if (op.LT() != null)
+            return compare < 0;
+        throw DberParsingRuntimException.build("invalid cal:" + cal.getText());
+    }
+
+    private int compare(Object a, Object b) {
+        return Objects.compare(a, b, null);
     }
 
     private Object parseCalVar(DberParser.CalVarContext c, Object[] args) {
-        if (c.vars != null) {
-            c.vars.forEach(id -> {
-                System.out.println("id--" + id.getClass().getName());
-            });
-            //            return extractEntityValue(getArgByName(c.ID().getText(), args), );
-        } else if (c.value() != null) {
+//        if (c.vars != null && !c.vars.isEmpty()) {
+//            if(c.vars.size()==1 && c.vars.get(0).value())
+//            return extractEntityValue(c.vars.stream().map(v -> v.getText()).collect(Collectors.toList()), args);
+//        }
+        if (c.value() != null)
             return parseValue(c.value());
-        }
-        return null;
+        return extractEntityValue(c.ID().stream().map(v -> v.getText()).collect(Collectors.toList()), args);
     }
 
     private Object parseValue(DberParser.ValueContext v) {
@@ -175,6 +203,10 @@ public class DberContext {
                 return Long.parseLong(v.num().LONG().getText());
             throw new DberParsingRuntimException("invalid num:" + v.num().getText());
         }
+//        if (v.INT() != null)
+//            return Integer.parseInt(v.INT().getText());
+//        if (v.LONG() != null)
+//            return Long.parseLong(v.LONG().getText());
         if (v.STRING() != null)
             return v.STRING().getText();
         throw new DberParsingRuntimException("invalid value:" + v.getText());
