@@ -23,8 +23,12 @@ value   : num |STRING| NULL ;
 VAR_PREFIX : '#' | '$';
 varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
 
-calVar  : vars +=ID ('.' vars+=ID)*
-        |value;
+calVar  : value |(vars +=ID ('.' vars+=ID)*)
+
+//calVarElement:value|ID;
+//calVar  : vars +=calVarElement ('.' vars+=calVarElement)*
+//calVar  : varExpr | value
+        ;
 cal:    cal op cal
         |calVar
         ;       //a > 3  , 3==2
@@ -69,5 +73,5 @@ LINE_COMMENT
     ;
 
 
-sentence :(exprPredict|varExpr|.)+?
+sentence :(exprPredict|varExpr|'*'|'.'|.)+?
         ;
