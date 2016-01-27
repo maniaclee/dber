@@ -9,15 +9,15 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface DberListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link DberParser#num}.
+	 * Enter a parse tree produced by {@link DberParser#varExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterNum(DberParser.NumContext ctx);
+	void enterVarExpr(DberParser.VarExprContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DberParser#num}.
+	 * Exit a parse tree produced by {@link DberParser#varExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitNum(DberParser.NumContext ctx);
+	void exitVarExpr(DberParser.VarExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DberParser#value}.
 	 * @param ctx the parse tree
@@ -29,16 +29,6 @@ public interface DberListener extends ParseTreeListener {
 	 */
 	void exitValue(DberParser.ValueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DberParser#varExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarExpr(DberParser.VarExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link DberParser#varExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarExpr(DberParser.VarExprContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link DberParser#calVar}.
 	 * @param ctx the parse tree
 	 */
@@ -48,6 +38,16 @@ public interface DberListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCalVar(DberParser.CalVarContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link DberParser#num}.
+	 * @param ctx the parse tree
+	 */
+	void enterNum(DberParser.NumContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link DberParser#num}.
+	 * @param ctx the parse tree
+	 */
+	void exitNum(DberParser.NumContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DberParser#cal}.
 	 * @param ctx the parse tree

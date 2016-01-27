@@ -194,22 +194,23 @@ public class DberContext {
     }
 
     private Object parseValue(DberParser.ValueContext v) {
-        if (v.NULL() != null)
-            return null;
-        if (v.num() != null) {
-            if (v.num().INT() != null)
-                return Integer.parseInt(v.num().INT().getText());
-            if (v.num().LONG() != null)
-                return Long.parseLong(v.num().LONG().getText());
-            throw new DberParsingRuntimException("invalid num:" + v.num().getText());
-        }
-//        if (v.INT() != null)
-//            return Integer.parseInt(v.INT().getText());
-//        if (v.LONG() != null)
-//            return Long.parseLong(v.LONG().getText());
-        if (v.STRING() != null)
-            return v.STRING().getText();
-        throw new DberParsingRuntimException("invalid value:" + v.getText());
+//        if (v.NULL() != null)
+//            return null;
+//        if (v.num() != null) {
+//            if (v.num().INT() != null)
+//                return Integer.parseInt(v.num().INT().getText());
+//            if (v.num().LONG() != null)
+//                return Long.parseLong(v.num().LONG().getText());
+//            throw new DberParsingRuntimException("invalid num:" + v.num().getText());
+//        }
+////        if (v.INT() != null)
+////            return Integer.parseInt(v.INT().getText());
+////        if (v.LONG() != null)
+////            return Long.parseLong(v.LONG().getText());
+//        if (v.STRING() != null)
+//            return v.STRING().getText();
+//        throw new DberParsingRuntimException("invalid value:" + v.getText());
+        return v.result;
     }
 
     public static class ParseHandler {

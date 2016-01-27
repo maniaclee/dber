@@ -8,6 +8,30 @@ grammar Dber;
 //ID : [a-zA-Z] [a-zA-Z0-9]* ;
 //ANY : . ;
 
+/**
+returns : rule should be replace before lexer --> varExpr should be place before ID !!!!!
+*/
+varExpr returns [List<String> result]:
+        VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}'
+        {$result = $vars.stream().map(v->v.getText()).collect(java.util.stream.Collectors.toList());}
+        ;  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
+
+
+value  returns [Object result] :
+        NULL
+        |STRING      {$result =  $STRING.text;}
+        |INT          {$result =  $INT.int;}
+        ;
+
+calVar  :
+        value
+        |(vars +=ID ('.' vars+=ID)*)
+
+//calVarElement:value|ID;
+//calVar  : vars +=calVarElement ('.' vars+=calVarElement)*
+//calVar  : varExpr | value
+        ;
+
 
 INT	:[0-9]+;  //token大写，rule小写
 LONG:INT 'l';
@@ -18,17 +42,10 @@ STRING	: '\''.*?'\'';
 num :INT    //{java.lang.Number x = $INT.int;}
     | LONG // {java.lang.Number x = java.lang.Long.parseLong($LONG.text);}
     ;
-value   : num |STRING| NULL ;
+
 
 VAR_PREFIX : '#' | '$';
-varExpr: VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}';  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
 
-calVar  : value |(vars +=ID ('.' vars+=ID)*)
-
-//calVarElement:value|ID;
-//calVar  : vars +=calVarElement ('.' vars+=calVarElement)*
-//calVar  : varExpr | value
-        ;
 cal:    cal op cal
         |calVar
         ;       //a > 3  , 3==2

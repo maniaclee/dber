@@ -17,13 +17,13 @@ public class DberBaseListener implements DberListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNum(DberParser.NumContext ctx) { }
+	@Override public void enterVarExpr(DberParser.VarExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNum(DberParser.NumContext ctx) { }
+	@Override public void exitVarExpr(DberParser.VarExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -41,18 +41,6 @@ public class DberBaseListener implements DberListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarExpr(DberParser.VarExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarExpr(DberParser.VarExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterCalVar(DberParser.CalVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -60,6 +48,18 @@ public class DberBaseListener implements DberListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCalVar(DberParser.CalVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNum(DberParser.NumContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNum(DberParser.NumContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
