@@ -47,6 +47,12 @@ public class TestCase {
         for (User u : daoLayer.findByNameAndLevel("test", null)) {
             System.out.println(ToStringBuilder.reflectionToString(u));
         }
+        System.out.println(daoLayer.updateLevelById(22,-1));
+        User user = new User();
+        user.setEmail("shitemail");
+        user.setName("test-insert");
+        user.setSex(1);
+        System.out.println(daoLayer.insert(user));
 //        List<User> re =daoLayer.findByName("root");
 //        System.out.println(re.get(0));
     }

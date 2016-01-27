@@ -1,1 +1,2 @@
-select * from ${tableName.shit} where  if{a > null && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}}
+//select * from ${tableName.shit} where  if{a > null && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}}
+ insert into User(name,sex,email) values($user.name,$user.sex,$user.email)

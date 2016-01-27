@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import psyco.dber.mapper.KeySelector;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.mapper.SqlDelegate;
 import psyco.dber.parser.EntityConvertor;
@@ -14,6 +15,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import static psyco.dber.anno.Key.Type_DB;
+import static psyco.dber.anno.Key.Type_Entity;
 
 /**
  * Created by lipeng on 16/1/4.
@@ -27,7 +31,7 @@ public class SqlDelegateImpl implements SqlDelegate {
     }
 
     public List select(Sentence sentence, Object[] parameters) {
-        if(sentence.getParameterMappers()==null || sentence.getParameterMappers().isEmpty())
+        if (sentence.getParameterMappers() == null || sentence.getParameterMappers().isEmpty())
             return template.query(sentence.getSqlDefinition().getSql(), parameters, findRowMapperByClass(sentence.findActualReturnType()));
         DberContext.ParseHandler re = sentence.getDberContext().parse(parameters);
         return template.query(re.getSql(), re.getArgs(), findRowMapperByClass(sentence.findActualReturnType()));
@@ -51,7 +55,18 @@ public class SqlDelegateImpl implements SqlDelegate {
 
     public Object insert(Sentence sentence, Object[] parameters) {
         int re = update(sentence, parameters);
-        return null;
+        if (re <= 0)
+            return -1;
+        KeySelector keySelector = sentence.getKeySelector();
+        if (keySelector == null)
+            return re;
+        switch (keySelector.type) {
+            case Type_DB:
+                return template.queryForObject(keySelector.sql, sentence.findActualReturnType());
+            case Type_Entity:
+                return DberContext.extractEntityValue(parameters[0], keySelector.sql);
+        }
+        return re;
     }
 
     private BeanPropertyRowMapper findRowMapperByClass(Class clz) {

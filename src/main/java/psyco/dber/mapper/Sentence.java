@@ -5,7 +5,6 @@ import psyco.dber.utils.ReflectionUtils;
 
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Created by peng on 15/12/29.
@@ -16,8 +15,6 @@ public class Sentence {
     ResultMapping resultMapping;
     Type returnType;
     DberContext dberContext;
-
-    private static Pattern pattern = Pattern.compile("#\\{([^\\{\\}]+)\\}");
 
     /**
      * only for insert

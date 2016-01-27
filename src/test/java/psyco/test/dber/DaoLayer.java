@@ -1,8 +1,6 @@
 package psyco.test.dber;
 
-import psyco.dber.anno.Dao;
-import psyco.dber.anno.Param;
-import psyco.dber.anno.Select;
+import psyco.dber.anno.*;
 import psyco.test.dber.entity.User;
 
 import java.util.List;
@@ -26,11 +24,19 @@ public interface DaoLayer {
             "if{#level !=null ->  and level = #level }"})
     List<User> findByNameAndLevel(@Param("name") String name, @Param("level") Integer level);
 
-//    @Select({"select * from User where id in #{ids}",
-//            "if{status>0 && status != 1-> and status = #{status} else-> } ",
-//            "if{status<=0 } -> and status = #{status}",
-//            "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
-//    List<User> findByList(List<Long> ids, Integer status, Integer offset, Integer length);
+    @Update("update User set level = $level where id = $id")
+    int updateLevelById(@Param("id") long id, @Param("level") Integer level);
+
+
+    @Insert(" insert into User(name,sex,email) values($user.name,$user.sex,$user.email)")
+    int insert(@Param("user") User user);
+
+
+    //    @Select({"select * from User where id in #{ids}",
+    //            "if{status>0 && status != 1-> and status = #{status} else-> } ",
+    //            "if{status<=0 } -> and status = #{status}",
+    //            "if{offset != null && length !=null } -> limit #{offset} , #{count}"})
+    //    List<User> findByList(List<Long> ids, Integer status, Integer offset, Integer length);
 
 
 }

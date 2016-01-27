@@ -14,7 +14,7 @@ import static java.lang.annotation.ElementType.METHOD;
 public @interface Key {
 
     int Type_DB = 1;
-    int Type_Entity = 1;
+    int Type_Entity = 2;
 
     String value() default "SELECT @@IDENTITY";
 

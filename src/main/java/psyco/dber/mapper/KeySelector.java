@@ -7,11 +7,12 @@ import psyco.dber.anno.Key;
  */
 public class KeySelector {
 
-    private String sql;
-    private int type ;
+    public String sql;
+    public int type ;
 
     public KeySelector(Key key) {
         this.sql = key.value();
         this.type = key.type();
     }
+
 }

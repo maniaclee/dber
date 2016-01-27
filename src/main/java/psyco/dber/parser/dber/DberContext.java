@@ -84,7 +84,7 @@ public class DberContext {
 
     private Object parseVarValue(Object[] args, DberParser.VarExprContext var) {
         List<String> names = var.vars.stream().map(v -> v.getText()).collect(Collectors.toList());
-        return extractEntityValue(getArgByName(names.get(0), args), names, var.getText());
+        return extractEntityValue(getArgByName(names.get(0), args), names);
     }
 
     private Object getArgByName(String name, Object[] args) {
@@ -94,8 +94,12 @@ public class DberContext {
     }
 
 
-    private Object extractEntityValue(Object c, List<String> props, String text) {
-        Preconditions.checkArgument(props != null && !props.isEmpty(), "expression can't be empty:" + text);
+    public static Object extractEntityValue(Object c, String textPlainWithDot) {
+        return extractEntityValue(c, Lists.newArrayList(textPlainWithDot.split("\\.")));
+    }
+
+    public static Object extractEntityValue(Object c, List<String> props) {
+        Preconditions.checkArgument(props != null && !props.isEmpty(), "expression can't be empty:" + props.stream().collect(Collectors.joining(".")));
         if (props.size() > 1)
             for (int i = 1; i < props.size(); i++) {
                 try {
