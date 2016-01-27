@@ -1,4 +1,5 @@
 //select * from User where name = #{name}  if{#{level} !=null ->  and level = #{level} }
-select * from User where name = #{name}  if{level != 3 ->  and level = #{level} }
+//select * from User where name = #{name}  if{level != 3 ->  and level = #{level} }
+select * from User where name = $name  if{$level != 3 ->  and level = #level }
 
 //select * from ${tableName.shit} where  if{a >'sss' && b < 3 || 3 < 6  -> status = #{status}  else ->  id > #{id}}

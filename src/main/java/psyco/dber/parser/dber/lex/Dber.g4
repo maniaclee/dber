@@ -12,24 +12,22 @@ grammar Dber;
 returns : rule should be replace before lexer --> varExpr should be place before ID !!!!!
 */
 varExpr returns [List<String> result]:
-        VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}'
+//        VAR_PREFIX '{' vars +=ID ('.' vars+=ID)* '}'
+        VAR_PREFIX vars +=ID ('.' vars+=ID)*
         {$result = $vars.stream().map(v->v.getText()).collect(java.util.stream.Collectors.toList());}
         ;  //在Context里弄成数组 List<Token> vars = new ArrayList<Token>()
 
 
 value  returns [Object result] :
-        NULL
+        'null'
+        |'NULL'
         |STRING      {$result =  $STRING.text;}
         |INT          {$result =  $INT.int;}
         ;
 
-calVar  :
-        value
-        |(vars +=ID ('.' vars+=ID)*)
-
-//calVarElement:value|ID;
-//calVar  : vars +=calVarElement ('.' vars+=calVarElement)*
-//calVar  : varExpr | value
+calVar  : value
+//        |(vars +=ID ('.' vars+=ID)*)
+        |varExpr
         ;
 
 

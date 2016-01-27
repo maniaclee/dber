@@ -18,7 +18,8 @@ varExpr returns [List<String> result]:
 
 
 value  returns [Object result] :
-        NULL
+        'null'
+        |'NULL'
         |STRING      {$result =  $STRING.text;}
         |INT          {$result =  $INT.int;}
         ;
