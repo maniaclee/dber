@@ -19,11 +19,11 @@ public interface DaoLayer {
     @Select("select * from User where id < ?")
     List<User> find(long id);
 
-    @Select("select * from User where name = #{name} ")
+    @Select("select * from User where name = #name ")
     List<User> findByName(@Param("name") String name);
 
-    @Select({"select * from User where name = #{name} ",
-            "if{level !=null ->  and level = #{level} }"})
+    @Select({"select * from User where name = #name ",
+            "if{#level !=null ->  and level = #level }"})
     List<User> findByNameAndLevel(@Param("name") String name, @Param("level") Integer level);
 
 //    @Select({"select * from User where id in #{ids}",
