@@ -184,32 +184,14 @@ public class DberContext {
     }
 
     private Object parseCalVar(DberParser.CalVarContext c, Object[] args) {
-//        if (c.vars != null && !c.vars.isEmpty()) {
-//            if(c.vars.size()==1 && c.vars.get(0).value())
-//            return extractEntityValue(c.vars.stream().map(v -> v.getText()).collect(Collectors.toList()), args);
-//        }
         if (c.value() != null)
             return parseValue(c.value());
-        return extractEntityValue(c.ID().stream().map(v -> v.getText()).collect(Collectors.toList()), args);
+        if (c.varExpr() != null)
+            return extractEntityValue(c.varExpr().ID().stream().map(v -> v.getText()).collect(Collectors.toList()), args);
+        throw DberParsingRuntimException.build("invalid var or value:" + c.getText());
     }
 
     private Object parseValue(DberParser.ValueContext v) {
-//        if (v.NULL() != null)
-//            return null;
-//        if (v.num() != null) {
-//            if (v.num().INT() != null)
-//                return Integer.parseInt(v.num().INT().getText());
-//            if (v.num().LONG() != null)
-//                return Long.parseLong(v.num().LONG().getText());
-//            throw new DberParsingRuntimException("invalid num:" + v.num().getText());
-//        }
-////        if (v.INT() != null)
-////            return Integer.parseInt(v.INT().getText());
-////        if (v.LONG() != null)
-////            return Long.parseLong(v.LONG().getText());
-//        if (v.STRING() != null)
-//            return v.STRING().getText();
-//        throw new DberParsingRuntimException("invalid value:" + v.getText());
         return v.result;
     }
 
