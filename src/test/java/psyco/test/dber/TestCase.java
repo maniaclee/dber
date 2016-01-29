@@ -14,6 +14,7 @@ import psyco.test.DalConfig;
 import psyco.test.dber.entity.User;
 
 import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,32 @@ public class TestCase {
     DaoLayer daoLayer;
 
 
+    private void print(Object p){
+        System.out.println(ToStringBuilder.reflectionToString(p));
+        if(p instanceof  Iterable){
+            Iterator i =  ((Iterable) p).iterator();
+            while(i.hasNext())
+                System.out.println(ToStringBuilder.reflectionToString(i.next()));
+        }
+    }
+    @Test
+    public void find(){
+        print(daoLayer.find());
+    }
+    @Test
+    public void find2(){
+        print(daoLayer.find(22));
+    }
+
+    @Test
+    public void findByNameAndLevel(){
+        print(daoLayer.find(22));
+    }
+    @Test
+    public void update(){
+        print(daoLayer.updateLevelById(22,-1));
+    }
+
     @Test
     public void sdfs() {
         //        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
@@ -44,15 +71,11 @@ public class TestCase {
         //        System.out.println(a);
 //        for (User u : daoLayer.find(41)) {
 //        for (User u : daoLayer.findByName("root")) {
-        for (User u : daoLayer.findByNameAndLevel("test", null)) {
-            System.out.println(ToStringBuilder.reflectionToString(u));
-        }
-        System.out.println(daoLayer.updateLevelById(22,-1));
         User user = new User();
         user.setEmail("shitemail");
         user.setName("test-insert");
         user.setSex(1);
-        System.out.println(daoLayer.insert(user));
+//        System.out.println(daoLayer.insert(user));
 //        List<User> re =daoLayer.findByName("root");
 //        System.out.println(re.get(0));
     }

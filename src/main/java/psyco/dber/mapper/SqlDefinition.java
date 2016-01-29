@@ -44,7 +44,11 @@ public class SqlDefinition {
     }
 
     public static String generateId(Method m) {
-        return m.getDeclaringClass().getName() + "#" + m.getName();
+//        System.out.println(m.toGenericString());
+//        System.out.println(m.getName());
+//        System.out.println(m.toString());
+//        return m.getDeclaringClass().getName() + "#" + m.getName();
+        return m.toGenericString();
     }
 
     public String getSqlId() {
