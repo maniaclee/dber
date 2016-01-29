@@ -62,6 +62,11 @@ public class TestCase {
     }
 
     @Test
+    public void insert(){
+
+    }
+
+    @Test
     public void sdfs() {
         //        List<Map<String, Object>> a = jdbcTemplate.queryForList("select * from User");
         ////        List<User> a = jdbcTemplate.queryForList("select * from User",User.class);
