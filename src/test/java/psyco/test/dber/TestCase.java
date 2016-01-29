@@ -35,35 +35,42 @@ public class TestCase {
     DaoLayer daoLayer;
 
 
-    private void print(Object p){
+    private void print(Object p) {
         System.out.println(ToStringBuilder.reflectionToString(p));
-        if(p instanceof  Iterable){
-            Iterator i =  ((Iterable) p).iterator();
-            while(i.hasNext())
+        if (p instanceof Iterable) {
+            Iterator i = ((Iterable) p).iterator();
+            while (i.hasNext())
                 System.out.println(ToStringBuilder.reflectionToString(i.next()));
         }
     }
+
     @Test
-    public void find(){
+    public void find() {
         print(daoLayer.find());
     }
+
     @Test
-    public void find2(){
+    public void find2() {
         print(daoLayer.find(22));
     }
 
     @Test
-    public void findByNameAndLevel(){
+    public void findByNameAndLevel() {
         print(daoLayer.find(22));
     }
+
     @Test
-    public void update(){
-        print(daoLayer.updateLevelById(22,-1));
+    public void update() {
+        print(daoLayer.updateLevelById(22, -1));
     }
 
     @Test
-    public void insert(){
-
+    public void insert() {
+        User user = new User();
+        user.setEmail("shitemail");
+        user.setName("test-insert");
+        user.setSex(1);
+        System.out.println(daoLayer.insert(user));
     }
 
     @Test
@@ -74,15 +81,15 @@ public class TestCase {
         //            System.out.println(m);
         //        }
         //        System.out.println(a);
-//        for (User u : daoLayer.find(41)) {
-//        for (User u : daoLayer.findByName("root")) {
+        //        for (User u : daoLayer.find(41)) {
+        //        for (User u : daoLayer.findByName("root")) {
         User user = new User();
         user.setEmail("shitemail");
         user.setName("test-insert");
         user.setSex(1);
-//        System.out.println(daoLayer.insert(user));
-//        List<User> re =daoLayer.findByName("root");
-//        System.out.println(re.get(0));
+        //        System.out.println(daoLayer.insert(user));
+        //        List<User> re =daoLayer.findByName("root");
+        //        System.out.println(re.get(0));
     }
 
 }
