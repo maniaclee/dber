@@ -67,10 +67,12 @@ public class TestCase {
     @Test
     public void insert() {
         User user = new User();
+        user.setId(-111);
         user.setEmail("shitemail");
         user.setName("test-insert");
         user.setSex(1);
         System.out.println(daoLayer.insert(user));
+        System.out.println(daoLayer.insertWithId(user));
     }
 
     @Test

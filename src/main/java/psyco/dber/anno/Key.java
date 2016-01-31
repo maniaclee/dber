@@ -12,12 +12,5 @@ import static java.lang.annotation.ElementType.METHOD;
 @Target({METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Key {
-
-    int Type_DB = 1;
-    int Type_Entity = 2;
-
-    String value() default "SELECT @@IDENTITY";
-
-    int type() default Type_DB;
-
+    String customSql() default "";
 }

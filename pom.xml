@@ -68,6 +68,16 @@
             <artifactId>antlr4</artifactId>
             <version>4.5</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.mybatis</groupId>-->
+            <!--<artifactId>mybatis</artifactId>-->
+            <!--<version>3.3.0</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.ibatis</groupId>
+            <artifactId>ibatis-sqlmap</artifactId>
+            <version>2.3.4.726</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

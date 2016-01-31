@@ -4,20 +4,16 @@ import com.google.common.collect.Maps;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import psyco.dber.mapper.KeySelector;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import psyco.dber.mapper.Sentence;
 import psyco.dber.mapper.SqlDelegate;
 import psyco.dber.parser.EntityConvertor;
 import psyco.dber.parser.dber.DberContext;
 
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Map;
-
-import static psyco.dber.anno.Key.Type_DB;
-import static psyco.dber.anno.Key.Type_Entity;
 
 /**
  * Created by lipeng on 16/1/4.
@@ -54,20 +50,41 @@ public class SqlDelegateImpl implements SqlDelegate {
     }
 
     public Object insert(Sentence sentence, Object[] parameters) {
-        int re = update(sentence, parameters);
-        if (re <= 0)
-            return -1;
-        KeySelector keySelector = sentence.getKeySelector();
-        if (keySelector == null)
-            return re;
-        switch (keySelector.type) {
-            case Type_DB:
-                return template.queryForObject(keySelector.sql, sentence.findActualReturnType());
-            case Type_Entity:
-                return DberContext.extractEntityValue(parameters[0], keySelector.sql);
+        if (sentence.getKeySelector() == null)
+            return update(sentence, parameters);
+        if (sentence.getKeySelector().customSql == null) {
+            DberContext.ParseHandler re = sentence.getDberContext().parse(parameters);
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            template.update(con -> {
+                PreparedStatement ps = con.prepareStatement(re.getSql(), Statement.RETURN_GENERATED_KEYS);
+                List argsSave = re.getArgList();
+                for (int i = 0; i < argsSave.size(); i++) {
+                    ps.setObject(i + 1, argsSave.get(i));
+                }
+                return ps;
+            }, keyHolder);
+
+            return keyHolder.getKey();
+        } else {
+            update(sentence, parameters);
+            return sentence.getDberContext().extractEntityValue(sentence.getKeySelector().properties, parameters);
         }
-        return re;
     }
+//    public Object insert(Sentence sentence, Object[] parameters) {
+//        int re = update(sentence, parameters);
+//        if (re <= 0)
+//            return -1;
+//        KeySelector keySelector = sentence.getKeySelector();
+//        if (keySelector == null)
+//            return re;
+//        switch (keySelector.type) {
+//            case Type_DB:
+//                return template.queryForObject(keySelector.sql, sentence.findActualReturnType());
+//            case Type_Entity:
+//                return DberContext.extractEntityValue(parameters[0], keySelector.sql);
+//        }
+//        return re;
+//    }
 
     private BeanPropertyRowMapper findRowMapperByClass(Class clz) {
         BeanPropertyRowMapper re = rowMapperMap.get(clz);

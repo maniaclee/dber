@@ -30,7 +30,11 @@ public interface DaoLayer {
 
     @Key
     @Insert(" insert into User(name,sex,email) values($user.name,$user.sex,$user.email)")
-    Long insert(@Param("user") User user);
+    long insert(@Param("user") User user);
+
+    @Key(customSql = "$user.id")
+    @Insert(" insert into User(id,name,sex,email) values($user.id,$user.name,$user.sex,$user.email)")
+    long insertWithId(@Param("user") User user);
 
 
     //    @Select({"select * from User where id in #{ids}",

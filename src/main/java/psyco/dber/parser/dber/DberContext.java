@@ -94,11 +94,11 @@ public class DberContext {
     }
 
 
-    public static Object extractEntityValue(Object c, String textPlainWithDot) {
+    private Object extractEntityValue(Object c, String textPlainWithDot) {
         return extractEntityValue(c, Lists.newArrayList(textPlainWithDot.split("\\.")));
     }
 
-    public static Object extractEntityValue(Object c, List<String> props) {
+    private Object extractEntityValue(Object c, List<String> props) {
         Preconditions.checkArgument(props != null && !props.isEmpty(), "expression can't be empty:" + props.stream().collect(Collectors.joining(".")));
         if (props.size() > 1)
             for (int i = 1; i < props.size(); i++) {
@@ -111,16 +111,9 @@ public class DberContext {
         return c;
     }
 
-    private Object extractEntityValue(List<String> props, Object[] args) {
+    public Object extractEntityValue(List<String> props, Object[] args) {
         Object c = getArgByName(props.get(0), args);
-        for (int i = 1; i < props.size(); i++) {
-            try {
-                c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i));
-            } catch (NoSuchFieldException e) {
-                throw new DberParsingRuntimException(e);
-            }
-        }
-        return c;
+        return extractEntityValue(c,props);
     }
 
     private void replace(ParserRuleContext c, String s, ParseHandler parseHandle) {
