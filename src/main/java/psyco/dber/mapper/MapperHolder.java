@@ -24,9 +24,14 @@ public class MapperHolder {
 
     public static void parse(Set<Class<?>> clz) throws Exception {
         for (Class<?> c : clz)
-            for (Method m : c.getDeclaredMethods())
-                addMapping(SqlDefinition.parse(m), m);
+            parse(c);
     }
+
+    public static void parse(Class<?> c) throws Exception {
+        for (Method m : c.getDeclaredMethods())
+            addMapping(SqlDefinition.parse(m), m);
+    }
+
 
     private static Sentence addMapping(SqlDefinition sqlDefinition, Method m) throws Exception {
         if (sqlDefinition == null)
@@ -37,7 +42,7 @@ public class MapperHolder {
         sentence.setReturnType(m.getGenericReturnType());
         /** parameter mappings  */
         sentence.setParameterMappers(createParameters(m));
-        sentence.setDberContext(DberContext.getInstance(sentence.getSqlDefinition().getSql(),sentence));
+        sentence.setDberContext(DberContext.getInstance(sentence.getSqlDefinition().getSql(), sentence));
         if (m.getAnnotation(Key.class) != null)
             sentence.setKeySelector(new KeySelector(m.getAnnotation(Key.class)));
 

@@ -48,8 +48,8 @@ public class Dber {
 
     public void init() throws Exception {
         proxyFactory = new SpringProxyFactory(sqlDelegate);
-        MapperHolder.parse(clz);
         for (Class<?> c : clz) {
+            MapperHolder.parse(c);
             delegates.put(c, proxyFactory.proxy(c));
         }
         this.inited = true;

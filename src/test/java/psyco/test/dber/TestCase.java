@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import psyco.dber.Dber;
 import psyco.dber.parser.dber.DberContext;
 import psyco.test.DalConfig;
 import psyco.test.dber.entity.User;
@@ -32,6 +33,9 @@ public class TestCase {
     private JdbcTemplate jdbcTemplate;
 
     @Resource
+    private Dber dber;
+
+    @Resource
     DaoLayer daoLayer;
 
 
@@ -51,7 +55,7 @@ public class TestCase {
 
     @Test
     public void find() {
-        print(daoLayer.find());
+        print(dber.getProxy(DaoLayer.class).find());
     }
 
     @Test

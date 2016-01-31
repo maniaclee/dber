@@ -40,12 +40,6 @@ public class DalConfig {
         dber.setSqlDelegate(new SqlDelegateImpl(jdbcTemplate));
         return dber;
     }
-//    @Bean
-//    public DberFactoryBean dber() {
-//        DberFactoryBean dber = new DberFactoryBean();
-//        dber.setPackageToScan(Collections.singletonList("psyco"));
-//        return dber;
-//    }
 
     @Bean
     public DberClient  dberClient(){
