@@ -1,9 +1,10 @@
-package psyco.dber.mapper;
+package psyco.dber.spring;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import psyco.dber.exception.DberException;
+import psyco.dber.mapper.*;
 
 import java.lang.reflect.Type;
 import java.util.Objects;

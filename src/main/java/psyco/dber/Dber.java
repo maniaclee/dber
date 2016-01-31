@@ -10,7 +10,7 @@ import org.springframework.util.ClassUtils;
 import psyco.dber.anno.Dao;
 import psyco.dber.mapper.MapperHolder;
 import psyco.dber.mapper.ProxyFactory;
-import psyco.dber.mapper.SpringProxyFactory;
+import psyco.dber.spring.SpringProxyFactory;
 import psyco.dber.mapper.SqlDelegate;
 
 import java.io.IOException;
