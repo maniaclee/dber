@@ -2,6 +2,8 @@
 
 Dber is an easy dao layer,based on Spring's JdbcTemplate.
 
+(Jdk 1.8 )
+
 ### Usage
 
 add spring config, provide a Dber bean with JdbcTemplate:
