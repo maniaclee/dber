@@ -36,11 +36,16 @@ public class TestCase {
 
 
     private void print(Object p) {
-        System.out.println(ToStringBuilder.reflectionToString(p));
         if (p instanceof Iterable) {
             Iterator i = ((Iterable) p).iterator();
-            while (i.hasNext())
-                System.out.println(ToStringBuilder.reflectionToString(i.next()));
+            if (i.hasNext())
+                while (i.hasNext())
+                    System.out.println(ToStringBuilder.reflectionToString(i.next()));
+            else{
+                System.out.println(p);
+            }
+        } else {
+            System.out.println(ToStringBuilder.reflectionToString(p));
         }
     }
 
@@ -56,7 +61,9 @@ public class TestCase {
 
     @Test
     public void findByNameAndLevel() {
-        print(daoLayer.find(22));
+        print(daoLayer.findByNameAndLevel("test", -1));
+        print(daoLayer.findByNameAndLevel("test", 1));
+        print(daoLayer.findByNameAndLevel("test", null));
     }
 
     @Test

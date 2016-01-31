@@ -140,7 +140,6 @@ public class DberContext {
     }
 
     private boolean cal(DberParser.CalContext cal, Object[] args) {
-        System.out.println(cal.getText());
         if (cal.op() != null) {
             Preconditions.checkArgument(cal.cal().size() > 1);
             DberParser.CalVarContext left = cal.cal(0).calVar();
