@@ -103,8 +103,8 @@ public class DberContext {
         if (props.size() > 1)
             for (int i = 1; i < props.size(); i++) {
                 try {
-                    c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i));
-                } catch (NoSuchFieldException e) {
+                    c = ReflectionUtils.getDeclaredField(c.getClass(), props.get(i)).get(c);
+                } catch (Exception e) {
                     throw new DberParsingRuntimException(e);
                 }
             }

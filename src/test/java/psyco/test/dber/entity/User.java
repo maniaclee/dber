@@ -1,11 +1,14 @@
 package psyco.test.dber.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by peng on 15/12/23.
  */
-public class User {
+public class User implements Serializable{
+
+    private static final long serialVersionUID = 5799155563595726310L;
     long id;
     String name;
     Date gmtCreate;

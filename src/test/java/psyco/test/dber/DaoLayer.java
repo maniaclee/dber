@@ -28,8 +28,9 @@ public interface DaoLayer {
     int updateLevelById(@Param("id") long id, @Param("level") Integer level);
 
 
+    @Key
     @Insert(" insert into User(name,sex,email) values($user.name,$user.sex,$user.email)")
-    int insert(@Param("user") User user);
+    Long insert(@Param("user") User user);
 
 
     //    @Select({"select * from User where id in #{ids}",

@@ -37,6 +37,12 @@ ID : [a-zA-Z_] [a-zA-Z0-9_]* ;
 NULL    : 'null' | 'NULL';
 STRING	: '\''.*?'\'';
 
+RPAREN  : ')' ;
+LPAREN  : '(';
+
+PLACEHOLDER:'?';
+COMMA:',';
+
 num :INT    //{java.lang.Number x = $INT.int;}
     | LONG // {java.lang.Number x = java.lang.Long.parseLong($LONG.text);}
     ;
@@ -70,6 +76,8 @@ LET     : '<=';
 EQ      : '=';
 NOT_EQ  : '!=' ;
 op      : GET|GT|LT|LET|EQ|NOT_EQ;  //这是个rule 要小写！！！
+
+
 
 AND     :'&&';
 OR      :'||';

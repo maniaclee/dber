@@ -51,7 +51,9 @@ public class ReflectionUtils {
 
         while(superClass != Object.class) {
             try {
-                return superClass.getDeclaredField(propertyName);
+                Field f = superClass.getDeclaredField(propertyName);
+                f.setAccessible(true);
+                return f;
             } catch (NoSuchFieldException var4) {
                 superClass = superClass.getSuperclass();
             }

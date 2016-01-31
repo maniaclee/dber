@@ -1,13 +1,16 @@
 // Generated from Dber.g4 by ANTLR 4.5
 package psyco.dber.parser.dber.lex;
-import org.antlr.v4.runtime.atn.*;
-import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
-import org.antlr.v4.runtime.tree.*;
-import java.util.List;
-import java.util.Iterator;
+import org.antlr.v4.runtime.atn.ATN;
+import org.antlr.v4.runtime.atn.ATNDeserializer;
+import org.antlr.v4.runtime.atn.ParserATNSimulator;
+import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.dfa.DFA;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
+import org.antlr.v4.runtime.tree.TerminalNode;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class DberParser extends Parser {
@@ -18,9 +21,9 @@ public class DberParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		INT=10, LONG=11, ID=12, NULL=13, STRING=14, VAR_PREFIX=15, GET=16, GT=17, 
-		LT=18, LET=19, EQ=20, NOT_EQ=21, AND=22, OR=23, NEWLINE=24, WS=25, EMPTY=26, 
-		BLOCK_COMMENT=27, LINE_COMMENT=28;
+		INT=10, LONG=11, ID=12, NULL=13, STRING=14, RPAREN=15, LPAREN=16, PLACEHOLDER=17, 
+		COMMA=18, VAR_PREFIX=19, GET=20, GT=21, LT=22, LET=23, EQ=24, NOT_EQ=25, 
+		AND=26, OR=27, NEWLINE=28, WS=29, EMPTY=30, BLOCK_COMMENT=31, LINE_COMMENT=32;
 	public static final int
 		RULE_varExpr = 0, RULE_value = 1, RULE_calVar = 2, RULE_num = 3, RULE_cal = 4, 
 		RULE_predict = 5, RULE_constIf = 6, RULE_exprSimple = 7, RULE_predictBodyTrue = 8, 
@@ -33,13 +36,14 @@ public class DberParser extends Parser {
 
 	private static final String[] _LITERAL_NAMES = {
 		null, "'.'", "'null'", "'NULL'", "'if'", "'{'", "'->'", "'else'", "'}'", 
-		"'*'", null, null, null, null, null, null, "'>='", "'>'", "'<'", "'<='", 
-		"'='", "'!='", "'&&'", "'||'"
+		"'*'", null, null, null, null, null, "')'", "'('", "'?'", "','", null, 
+		"'>='", "'>'", "'<'", "'<='", "'='", "'!='", "'&&'", "'||'"
 	};
 	private static final String[] _SYMBOLIC_NAMES = {
 		null, null, null, null, null, null, null, null, null, null, "INT", "LONG", 
-		"ID", "NULL", "STRING", "VAR_PREFIX", "GET", "GT", "LT", "LET", "EQ", 
-		"NOT_EQ", "AND", "OR", "NEWLINE", "WS", "EMPTY", "BLOCK_COMMENT", "LINE_COMMENT"
+		"ID", "NULL", "STRING", "RPAREN", "LPAREN", "PLACEHOLDER", "COMMA", "VAR_PREFIX", 
+		"GET", "GT", "LT", "LET", "EQ", "NOT_EQ", "AND", "OR", "NEWLINE", "WS", 
+		"EMPTY", "BLOCK_COMMENT", "LINE_COMMENT"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -985,7 +989,7 @@ public class DberParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\36}\4\2\t\2\4\3\t"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\"}\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
 		"\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\3\2\3\2\3\2\3\2\7\2#\n\2\f\2\16\2&"+
 		"\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3\60\n\3\3\4\3\4\5\4\64\n\4\3"+
@@ -994,10 +998,10 @@ public class DberParser extends Parser {
 		"\3\n\3\13\3\13\3\f\3\f\3\f\3\f\3\f\7\f_\n\f\f\f\16\fb\13\f\3\f\3\f\3\f"+
 		"\7\fg\n\f\f\f\16\fj\13\f\5\fl\n\f\3\f\3\f\3\r\3\r\3\16\3\16\3\17\3\17"+
 		"\3\17\3\17\3\17\6\17y\n\17\r\17\16\17z\3\17\5`hz\4\n\f\20\2\4\6\b\n\f"+
-		"\16\20\22\24\26\30\32\34\2\5\3\2\f\r\3\2\22\27\3\2\30\31~\2\36\3\2\2\2"+
+		"\16\20\22\24\26\30\32\34\2\5\3\2\f\r\3\2\26\33\3\2\34\35~\2\36\3\2\2\2"+
 		"\4/\3\2\2\2\6\63\3\2\2\2\b\65\3\2\2\2\n\67\3\2\2\2\fC\3\2\2\2\16O\3\2"+
 		"\2\2\20S\3\2\2\2\22U\3\2\2\2\24W\3\2\2\2\26Y\3\2\2\2\30o\3\2\2\2\32q\3"+
-		"\2\2\2\34x\3\2\2\2\36\37\7\21\2\2\37$\7\16\2\2 !\7\3\2\2!#\7\16\2\2\""+
+		"\2\2\2\34x\3\2\2\2\36\37\7\25\2\2\37$\7\16\2\2 !\7\3\2\2!#\7\16\2\2\""+
 		" \3\2\2\2#&\3\2\2\2$\"\3\2\2\2$%\3\2\2\2%\'\3\2\2\2&$\3\2\2\2\'(\b\2\1"+
 		"\2(\3\3\2\2\2)\60\7\4\2\2*\60\7\5\2\2+,\7\20\2\2,\60\b\3\1\2-.\7\f\2\2"+
 		".\60\b\3\1\2/)\3\2\2\2/*\3\2\2\2/+\3\2\2\2/-\3\2\2\2\60\5\3\2\2\2\61\64"+
