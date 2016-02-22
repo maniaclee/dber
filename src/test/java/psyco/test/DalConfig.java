@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import psyco.dber.Dber;
-import psyco.dber.spring.DberClient;
-import psyco.dber.spring.SqlDelegateImpl;
+import maniac.lee.dber.Dber;
+import maniac.lee.dber.spring.DberClient;
+import maniac.lee.dber.spring.SqlDelegateImpl;
 
 import javax.sql.DataSource;
 import java.util.Collections;

@@ -9,15 +9,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import psyco.dber.Dber;
-import psyco.dber.parser.dber.DberContext;
+import maniac.lee.dber.Dber;
 import psyco.test.DalConfig;
 import psyco.test.dber.entity.User;
 
 import javax.annotation.Resource;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by peng on 15/12/23.

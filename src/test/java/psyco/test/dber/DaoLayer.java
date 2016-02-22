@@ -1,6 +1,6 @@
 package psyco.test.dber;
 
-import psyco.dber.anno.*;
+import maniac.lee.dber.anno.*;
 import psyco.test.dber.entity.User;
 
 import java.util.List;

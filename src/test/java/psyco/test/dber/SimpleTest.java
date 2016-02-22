@@ -3,8 +3,8 @@ package psyco.test.dber;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
-import psyco.dber.parser.dber.DberContext;
-import psyco.dber.utils.ReflectionUtils;
+import maniac.lee.dber.parser.dber.DberContext;
+import maniac.lee.dber.utils.ReflectionUtils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
